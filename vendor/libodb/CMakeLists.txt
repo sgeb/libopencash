@@ -25,6 +25,7 @@ ExternalProject_Add(libodb
 
   # Wrap download, configure and build steps in a script to log output
   LOG_DOWNLOAD ON
-  #LOG_CONFIGURE ON
-  #LOG_BUILD ON
+  LOG_CONFIGURE ON
+  LOG_BUILD ON
+  LOG_INSTALL ON
 )

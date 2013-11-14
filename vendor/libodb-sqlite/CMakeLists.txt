@@ -25,9 +25,9 @@ ExternalProject_Add(libodb-sqlite
     CPPFLAGS=-I${OC_INSTALL_INCLUDE_DIR}
     LDFLAGS=-L${OC_INSTALL_LIB_DIR}
 
-    #--with-libodb=${OC_INSTALL_LIB_DIR}
   # Wrap download, configure and build steps in a script to log output
   LOG_DOWNLOAD ON
-  #LOG_CONFIGURE ON
-  #LOG_BUILD ON
+  LOG_CONFIGURE ON
+  LOG_BUILD ON
+  LOG_INSTALL ON
 )
