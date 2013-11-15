@@ -1,5 +1,6 @@
 set(SOURCES
   controller/DocumentController.cpp
+  controller/ModelObserver.cpp
   model/ObservableModel.cpp
   model/Account.cpp
   model/AccountsMeta.cpp

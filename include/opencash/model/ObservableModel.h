@@ -10,14 +10,14 @@ namespace opencash { namespace model {
 
   class ObservableModel {
     public:
-      Poco::BasicEvent<string> willChangeValueForKeyEvent;
-      Poco::BasicEvent<string> didChangeValueForKeyEvent;
+      Poco::BasicEvent<const string> willChangeValueForKeyEvent;
+      Poco::BasicEvent<const string> didChangeValueForKeyEvent;
 
     protected:
       void willChangeValueForKey(string key);
       void didChangeValueForKey(string key);
   };
 
-} }
+}}
 
 #endif

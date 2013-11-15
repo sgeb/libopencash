@@ -9,6 +9,17 @@ link_directories(
 )
 
 #
+# Account
+#
+
+add_executable(TestAccount TestAccount.cpp)
+target_link_libraries(TestAccount
+  ${OC_LIB_NAME}
+  ${GTEST_LIBS}
+)
+add_test(TestAccount TestAccount)
+
+#
 # DocumentController
 #
 
