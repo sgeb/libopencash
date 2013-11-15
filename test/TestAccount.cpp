@@ -40,7 +40,7 @@ class TestAccountObserver : public opencash::controller::ModelObserver {
     multiset<string> _keysOfDidChangeValue;
 };
 
-TEST(TestAccount, equalityIsBasedOnUuid) {
+TEST(TestAccount, shouldCompareEqualityBasedOnlyOnUuid) {
   // given
   Account a1(A_UUID);
   a1.setName("a1");
@@ -54,22 +54,19 @@ TEST(TestAccount, equalityIsBasedOnUuid) {
   Account another2(ANOTHER_UUID);
   another2.setName("another2");
 
-  // when
-  bool a1EqualsA1 = (a1 == a1);
-  bool a1EqualsA2 = (a1 == a2);
-  bool a1EqualsAnother1 = (a1 == another1);
-  bool a1EqualsAnother2 = (a1 == another2);
-  bool another1EqualsAnother2 = (another1 == another2);
+  Account a1DiffUuid(ANOTHER_UUID);
+  a1DiffUuid.setName("a1");
 
   // then
-  ASSERT_TRUE(a1EqualsA1);
-  ASSERT_TRUE(a1EqualsA2);
-  ASSERT_FALSE(a1EqualsAnother1);
-  ASSERT_FALSE(a1EqualsAnother2);
-  ASSERT_TRUE(another1EqualsAnother2);
+  ASSERT_TRUE(a1 == a1);
+  ASSERT_TRUE(a1 == a2);
+  ASSERT_FALSE(a1 == another1);
+  ASSERT_FALSE(a1 == another2);
+  ASSERT_TRUE(another1 == another2);
+  ASSERT_FALSE(a1 == a1DiffUuid);
 }
 
-TEST(TestAccount, observerEventsAreTriggered) {
+TEST(TestAccount, shouldTriggerObserverEvents) {
   // given
   Account acc(A_UUID);
   TestAccountObserver obs(acc);
