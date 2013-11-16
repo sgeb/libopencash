@@ -89,7 +89,7 @@ namespace odb
   // Account
   //
   template <typename A>
-  struct query_columns< ::opencash::model::Account, id_sqlite, A >
+  struct pointer_query_columns< ::opencash::model::Account, id_sqlite, A >
   {
     // uuid
     //
@@ -138,33 +138,44 @@ namespace odb
     type_type_;
 
     static const type_type_ type;
+
+    // parent
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        ::std::string,
+        sqlite::id_text >::query_type,
+      sqlite::id_text >
+    parent_type_;
+
+    static const parent_type_ parent;
   };
 
   template <typename A>
-  const typename query_columns< ::opencash::model::Account, id_sqlite, A >::uuid_type_
-  query_columns< ::opencash::model::Account, id_sqlite, A >::
+  const typename pointer_query_columns< ::opencash::model::Account, id_sqlite, A >::uuid_type_
+  pointer_query_columns< ::opencash::model::Account, id_sqlite, A >::
   uuid (A::table_name, "\"uuid\"", 0);
 
   template <typename A>
-  const typename query_columns< ::opencash::model::Account, id_sqlite, A >::name_type_
-  query_columns< ::opencash::model::Account, id_sqlite, A >::
+  const typename pointer_query_columns< ::opencash::model::Account, id_sqlite, A >::name_type_
+  pointer_query_columns< ::opencash::model::Account, id_sqlite, A >::
   name (A::table_name, "\"name\"", 0);
 
   template <typename A>
-  const typename query_columns< ::opencash::model::Account, id_sqlite, A >::description_type_
-  query_columns< ::opencash::model::Account, id_sqlite, A >::
+  const typename pointer_query_columns< ::opencash::model::Account, id_sqlite, A >::description_type_
+  pointer_query_columns< ::opencash::model::Account, id_sqlite, A >::
   description (A::table_name, "\"description\"", 0);
 
   template <typename A>
-  const typename query_columns< ::opencash::model::Account, id_sqlite, A >::type_type_
-  query_columns< ::opencash::model::Account, id_sqlite, A >::
+  const typename pointer_query_columns< ::opencash::model::Account, id_sqlite, A >::type_type_
+  pointer_query_columns< ::opencash::model::Account, id_sqlite, A >::
   type (A::table_name, "\"type\"", 0);
 
   template <typename A>
-  struct pointer_query_columns< ::opencash::model::Account, id_sqlite, A >:
-    query_columns< ::opencash::model::Account, id_sqlite, A >
-  {
-  };
+  const typename pointer_query_columns< ::opencash::model::Account, id_sqlite, A >::parent_type_
+  pointer_query_columns< ::opencash::model::Account, id_sqlite, A >::
+  parent (A::table_name, "\"parent\"", 0);
 
   template <>
   class access::object_traits_impl< ::opencash::model::Account, id_sqlite >:
@@ -205,10 +216,18 @@ namespace odb
       long long _type_value;
       bool _type_null;
 
+      // _parent
+      //
+      details::buffer _parent_value;
+      std::size_t _parent_size;
+      bool _parent_null;
+
       std::size_t version;
     };
 
     struct extra_statement_cache_type;
+
+    struct parent_tag;
 
     using object_traits<object_type>::id;
 
@@ -244,7 +263,7 @@ namespace odb
 
     typedef sqlite::query_base query_base_type;
 
-    static const std::size_t column_count = 4UL;
+    static const std::size_t column_count = 5UL;
     static const std::size_t id_column_count = 1UL;
     static const std::size_t inverse_column_count = 0UL;
     static const std::size_t readonly_column_count = 0UL;
@@ -310,6 +329,133 @@ namespace odb
 
   // Account
   //
+  template <>
+  struct alias_traits<
+    ::opencash::model::Account,
+    id_sqlite,
+    access::object_traits_impl< ::opencash::model::Account, id_sqlite >::parent_tag>
+  {
+    static const char table_name[];
+  };
+
+  template <>
+  struct query_columns_base< ::opencash::model::Account, id_sqlite >
+  {
+    // parent
+    //
+    typedef
+    odb::alias_traits<
+      ::opencash::model::Account,
+      id_sqlite,
+      access::object_traits_impl< ::opencash::model::Account, id_sqlite >::parent_tag>
+    parent_alias_;
+  };
+
+  template <typename A>
+  struct query_columns< ::opencash::model::Account, id_sqlite, A >:
+    query_columns_base< ::opencash::model::Account, id_sqlite >
+  {
+    // uuid
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        ::std::string,
+        sqlite::id_text >::query_type,
+      sqlite::id_text >
+    uuid_type_;
+
+    static const uuid_type_ uuid;
+
+    // name
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        ::std::string,
+        sqlite::id_text >::query_type,
+      sqlite::id_text >
+    name_type_;
+
+    static const name_type_ name;
+
+    // description
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        ::std::string,
+        sqlite::id_text >::query_type,
+      sqlite::id_text >
+    description_type_;
+
+    static const description_type_ description;
+
+    // type
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        ::opencash::model::AccountType,
+        sqlite::id_integer >::query_type,
+      sqlite::id_integer >
+    type_type_;
+
+    static const type_type_ type;
+
+    // parent
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        ::std::string,
+        sqlite::id_text >::query_type,
+      sqlite::id_text >
+    parent_column_type_;
+
+    typedef
+    odb::query_pointer<
+      odb::pointer_query_columns<
+        ::opencash::model::Account,
+        id_sqlite,
+        parent_alias_ > >
+    parent_pointer_type_;
+
+    struct parent_type_: parent_pointer_type_, parent_column_type_
+    {
+      parent_type_ (const char* t, const char* c, const char* conv)
+        : parent_column_type_ (t, c, conv)
+      {
+      }
+    };
+
+    static const parent_type_ parent;
+  };
+
+  template <typename A>
+  const typename query_columns< ::opencash::model::Account, id_sqlite, A >::uuid_type_
+  query_columns< ::opencash::model::Account, id_sqlite, A >::
+  uuid (A::table_name, "\"uuid\"", 0);
+
+  template <typename A>
+  const typename query_columns< ::opencash::model::Account, id_sqlite, A >::name_type_
+  query_columns< ::opencash::model::Account, id_sqlite, A >::
+  name (A::table_name, "\"name\"", 0);
+
+  template <typename A>
+  const typename query_columns< ::opencash::model::Account, id_sqlite, A >::description_type_
+  query_columns< ::opencash::model::Account, id_sqlite, A >::
+  description (A::table_name, "\"description\"", 0);
+
+  template <typename A>
+  const typename query_columns< ::opencash::model::Account, id_sqlite, A >::type_type_
+  query_columns< ::opencash::model::Account, id_sqlite, A >::
+  type (A::table_name, "\"type\"", 0);
+
+  template <typename A>
+  const typename query_columns< ::opencash::model::Account, id_sqlite, A >::parent_type_
+  query_columns< ::opencash::model::Account, id_sqlite, A >::
+  parent (A::table_name, "\"parent\"", 0);
 }
 
 #include <generated/Account-odb.ixx>

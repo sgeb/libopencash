@@ -27,6 +27,11 @@ namespace odb
   // Account
   //
 
+  const char alias_traits<  ::opencash::model::Account,
+    id_sqlite,
+    access::object_traits_impl< ::opencash::model::Account, id_sqlite >::parent_tag>::
+  table_name[] = "\"parent\"";
+
   struct access::object_traits_impl< ::opencash::model::Account, id_sqlite >::extra_statement_cache_type
   {
     extra_statement_cache_type (
@@ -96,6 +101,14 @@ namespace odb
     //
     t[3UL] = false;
 
+    // _parent
+    //
+    if (t[4UL])
+    {
+      i._parent_value.capacity (i._parent_size);
+      grew = true;
+    }
+
     return grew;
   }
 
@@ -151,6 +164,17 @@ namespace odb
     b[n].type = sqlite::bind::integer;
     b[n].buffer = &i._type_value;
     b[n].is_null = &i._type_null;
+    n++;
+
+    // _parent
+    //
+    b[n].type = sqlite::image_traits<
+      ::std::string,
+      sqlite::id_text>::bind_value;
+    b[n].buffer = i._parent_value.data ();
+    b[n].size = &i._parent_size;
+    b[n].capacity = i._parent_value.capacity ();
+    b[n].is_null = &i._parent_null;
     n++;
   }
 
@@ -254,6 +278,36 @@ namespace odb
       i._type_null = is_null;
     }
 
+    // _parent
+    //
+    {
+      ::std::shared_ptr< ::opencash::model::Account > const& v =
+        o._parent;
+
+      typedef object_traits< ::opencash::model::Account > obj_traits;
+      typedef odb::pointer_traits< ::std::shared_ptr< ::opencash::model::Account > > ptr_traits;
+
+      bool is_null (ptr_traits::null_ptr (v));
+      if (!is_null)
+      {
+        const obj_traits::id_type& id (
+          obj_traits::id (ptr_traits::get_ref (v)));
+
+        std::size_t cap (i._parent_value.capacity ());
+        sqlite::value_traits<
+            obj_traits::id_type,
+            sqlite::id_text >::set_image (
+          i._parent_value,
+          i._parent_size,
+          is_null,
+          id);
+        i._parent_null = is_null;
+        grew = grew || (cap != i._parent_value.capacity ());
+      }
+      else
+        i._parent_null = true;
+    }
+
     return grew;
   }
 
@@ -284,7 +338,7 @@ namespace odb
     // _name
     //
     {
-      // From Account.h:48:18
+      // From Account.h:54:18
       ::std::string v;
 
       sqlite::value_traits<
@@ -295,14 +349,14 @@ namespace odb
         i._name_size,
         i._name_null);
 
-      // From Account.h:48:18
+      // From Account.h:54:18
       o.setName (v);
     }
 
     // _description
     //
     {
-      // From Account.h:51:18
+      // From Account.h:57:18
       ::std::string v;
 
       sqlite::value_traits<
@@ -313,14 +367,14 @@ namespace odb
         i._description_size,
         i._description_null);
 
-      // From Account.h:51:18
+      // From Account.h:57:18
       o.setDescription (v);
     }
 
     // _type
     //
     {
-      // From Account.h:54:18
+      // From Account.h:60:18
       ::opencash::model::AccountType v;
 
       sqlite::value_traits<
@@ -330,8 +384,43 @@ namespace odb
         i._type_value,
         i._type_null);
 
-      // From Account.h:54:18
+      // From Account.h:60:18
       o.setType (v);
+    }
+
+    // _parent
+    //
+    {
+      // From Account.h:63:18
+      ::std::shared_ptr< ::opencash::model::Account > v;
+
+      typedef object_traits< ::opencash::model::Account > obj_traits;
+      typedef odb::pointer_traits< ::std::shared_ptr< ::opencash::model::Account > > ptr_traits;
+
+      if (i._parent_null)
+        v = ptr_traits::pointer_type ();
+      else
+      {
+        obj_traits::id_type id;
+        sqlite::value_traits<
+            obj_traits::id_type,
+            sqlite::id_text >::set_value (
+          id,
+          i._parent_value,
+          i._parent_size,
+          i._parent_null);
+
+        // If a compiler error points to the line below, then
+        // it most likely means that a pointer used in a member
+        // cannot be initialized from an object pointer.
+        //
+        v = ptr_traits::pointer_type (
+          static_cast<sqlite::database*> (db)->load<
+            obj_traits::object_type > (id));
+      }
+
+      // From Account.h:63:18
+      o.setParent (v);
     }
   }
 
@@ -362,16 +451,18 @@ namespace odb
   "(\"uuid\", "
   "\"name\", "
   "\"description\", "
-  "\"type\") "
+  "\"type\", "
+  "\"parent\") "
   "VALUES "
-  "(?, ?, ?, ?)";
+  "(?, ?, ?, ?, ?)";
 
   const char access::object_traits_impl< ::opencash::model::Account, id_sqlite >::find_statement[] =
   "SELECT "
   "\"accounts\".\"uuid\", "
   "\"accounts\".\"name\", "
   "\"accounts\".\"description\", "
-  "\"accounts\".\"type\" "
+  "\"accounts\".\"type\", "
+  "\"accounts\".\"parent\" "
   "FROM \"accounts\" "
   "WHERE \"accounts\".\"uuid\"=?";
 
@@ -380,7 +471,8 @@ namespace odb
   "SET "
   "\"name\"=?, "
   "\"description\"=?, "
-  "\"type\"=? "
+  "\"type\"=?, "
+  "\"parent\"=? "
   "WHERE \"uuid\"=?";
 
   const char access::object_traits_impl< ::opencash::model::Account, id_sqlite >::erase_statement[] =
@@ -388,12 +480,14 @@ namespace odb
   "WHERE \"uuid\"=?";
 
   const char access::object_traits_impl< ::opencash::model::Account, id_sqlite >::query_statement[] =
-  "SELECT "
-  "\"accounts\".\"uuid\", "
-  "\"accounts\".\"name\", "
-  "\"accounts\".\"description\", "
-  "\"accounts\".\"type\" "
-  "FROM \"accounts\"";
+  "SELECT\n"
+  "\"accounts\".\"uuid\",\n"
+  "\"accounts\".\"name\",\n"
+  "\"accounts\".\"description\",\n"
+  "\"accounts\".\"type\",\n"
+  "\"accounts\".\"parent\"\n"
+  "FROM \"accounts\"\n"
+  "LEFT JOIN \"accounts\" AS \"parent\" ON \"parent\".\"uuid\"=\"accounts\".\"parent\"";
 
   const char access::object_traits_impl< ::opencash::model::Account, id_sqlite >::erase_query_statement[] =
   "DELETE FROM \"accounts\"";
@@ -728,7 +822,7 @@ namespace odb
     std::string text (query_statement);
     if (!q.empty ())
     {
-      text += " ";
+      text += "\n";
       text += q.clause ();
     }
 
@@ -737,7 +831,7 @@ namespace odb
       new (shared) select_statement (
         conn,
         text,
-        false,
+        true,
         true,
         q.parameters_binding (),
         imb));
@@ -810,7 +904,12 @@ namespace odb
                       "  \"uuid\" TEXT NOT NULL PRIMARY KEY,\n"
                       "  \"name\" TEXT NOT NULL,\n"
                       "  \"description\" TEXT NOT NULL,\n"
-                      "  \"type\" INTEGER NOT NULL)");
+                      "  \"type\" INTEGER NOT NULL,\n"
+                      "  \"parent\" TEXT NULL,\n"
+                      "  CONSTRAINT \"parent_fk\"\n"
+                      "    FOREIGN KEY (\"parent\")\n"
+                      "    REFERENCES \"accounts\" (\"uuid\")\n"
+                      "    DEFERRABLE INITIALLY DEFERRED)");
           return false;
         }
       }

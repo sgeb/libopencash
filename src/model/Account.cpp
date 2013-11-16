@@ -2,6 +2,8 @@
 
 #include <sstream>
 
+using std::shared_ptr;
+
 namespace opencash { namespace model {
 
   Account::Account(const std::string & uuid)
@@ -57,6 +59,18 @@ namespace opencash { namespace model {
     willChangeValueForKey("type");
     _type = type;
     didChangeValueForKey("type");
+  }
+
+  shared_ptr<Account> Account::getParent() const
+  {
+    return _parent;
+  }
+
+  void Account::setParent(shared_ptr<Account> parent)
+  {
+    willChangeValueForKey("parent");
+    _parent = parent;
+    didChangeValueForKey("parent");
   }
 
 }}

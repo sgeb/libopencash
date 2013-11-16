@@ -10,6 +10,21 @@ using namespace std;
 const string A_UUID = "a_uuid";
 const string ANOTHER_UUID = "another_uuid";
 
+TEST(TestAccount, shouldBuildAccountHierarchy) {
+  // given
+  shared_ptr<Account> parentAcc(new Account(A_UUID));
+  parentAcc->setName("a1");
+
+  Account childAcc(ANOTHER_UUID);
+  childAcc.setName("another1");
+
+  // when
+  childAcc.setParent(parentAcc);
+
+  // then
+  ASSERT_EQ(*parentAcc, *childAcc.getParent());
+}
+
 TEST(TestAccount, shouldCompareEqualityBasedOnlyOnUuid) {
   // given
   Account a1(A_UUID);
