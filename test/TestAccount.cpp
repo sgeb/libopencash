@@ -1,7 +1,7 @@
 #include "opencash/model/Account.h"
 #include "opencash/controller/ModelObserver.h"
+#include "support/TestModelObserver.h"
 
-#include <Poco/Delegate.h>
 #include <gtest/gtest.h>
 
 using namespace opencash::model;
@@ -9,36 +9,6 @@ using namespace std;
 
 const string A_UUID = "a_uuid";
 const string ANOTHER_UUID = "another_uuid";
-
-class TestAccountObserver : public opencash::controller::ModelObserver {
-  public:
-    TestAccountObserver(Account & account) : ModelObserver(account) {}
-
-    bool hasWillChangeValueBeenFiredForKey(const string & key) const
-    {
-      return (_keysOfWillChangeValue.find(key) != _keysOfWillChangeValue.end());
-    }
-
-    bool hasDidChangeValueBeenFiredForKey(const string & key) const
-    {
-      return (_keysOfDidChangeValue.find(key) != _keysOfDidChangeValue.end());
-    }
-
-  protected: // overrides of ModelObserver
-    void willChangeValueForKey(const string & key) override
-    {
-      _keysOfWillChangeValue.insert(key);
-    }
-
-    void didChangeValueForKey(const string & key) override
-    {
-      _keysOfDidChangeValue.insert(key);
-    }
-
-  private:
-    multiset<string> _keysOfWillChangeValue;
-    multiset<string> _keysOfDidChangeValue;
-};
 
 TEST(TestAccount, shouldCompareEqualityBasedOnlyOnUuid) {
   // given
@@ -69,7 +39,7 @@ TEST(TestAccount, shouldCompareEqualityBasedOnlyOnUuid) {
 TEST(TestAccount, shouldTriggerObserverEvents) {
   // given
   Account acc(A_UUID);
-  TestAccountObserver obs(acc);
+  TestModelObserver obs(acc);
 
   // when
   acc.setName("A name");
@@ -77,6 +47,9 @@ TEST(TestAccount, shouldTriggerObserverEvents) {
   acc.setType(AccountType::Asset);
 
   // then
+  ASSERT_FALSE(obs.hasWillChangeValueBeenFiredForKey("fake"));
+  ASSERT_FALSE(obs.hasDidChangeValueBeenFiredForKey("fake"));
+
   ASSERT_TRUE(obs.hasWillChangeValueBeenFiredForKey("name"));
   ASSERT_TRUE(obs.hasDidChangeValueBeenFiredForKey("name"));
 

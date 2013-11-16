@@ -284,8 +284,8 @@ namespace odb
     // _name
     //
     {
-      ::std::string& v =
-        o._name;
+      // From Account.h:48:18
+      ::std::string v;
 
       sqlite::value_traits<
           ::std::string,
@@ -294,13 +294,16 @@ namespace odb
         i._name_value,
         i._name_size,
         i._name_null);
+
+      // From Account.h:48:18
+      o.setName (v);
     }
 
     // _description
     //
     {
-      ::std::string& v =
-        o._description;
+      // From Account.h:51:18
+      ::std::string v;
 
       sqlite::value_traits<
           ::std::string,
@@ -309,13 +312,16 @@ namespace odb
         i._description_value,
         i._description_size,
         i._description_null);
+
+      // From Account.h:51:18
+      o.setDescription (v);
     }
 
     // _type
     //
     {
-      ::opencash::model::AccountType& v =
-        o._type;
+      // From Account.h:54:18
+      ::opencash::model::AccountType v;
 
       sqlite::value_traits<
           ::opencash::model::AccountType,
@@ -323,6 +329,9 @@ namespace odb
         v,
         i._type_value,
         i._type_null);
+
+      // From Account.h:54:18
+      o.setType (v);
     }
   }
 

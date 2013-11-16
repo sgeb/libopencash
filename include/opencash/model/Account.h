@@ -45,8 +45,13 @@ namespace opencash { namespace model {
       #pragma db id
       std::string _uuid;
 
+      #pragma db set(setName)
       std::string _name;
+
+      #pragma db set(setDescription)
       std::string _description;
+
+      #pragma db set(setType)
       AccountType _type;
   };
 

@@ -37,7 +37,7 @@ namespace opencash { namespace controller {
       initializeDocument();
   }
 
-  const AccountsMeta * DocumentController::getAccountsMeta() const
+  AccountsMeta * DocumentController::getAccountsMeta() const
   {
     return _accountsMeta.get();
   }

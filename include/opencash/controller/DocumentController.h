@@ -26,7 +26,7 @@ namespace opencash { namespace controller {
           bool shouldInitialize = false);
 
     public: // related to Accounts
-      const AccountsMeta * getAccountsMeta() const;
+      AccountsMeta * getAccountsMeta() const;
       unique_ptr<vector<unique_ptr<Account>>> retrieveAccounts() const;
       unique_ptr<Account> newAccount() const;
       void persistAccount(const Account & account);
@@ -41,6 +41,6 @@ namespace opencash { namespace controller {
       unique_ptr<odb::database> _db;
   };
 
-} }
+}}
 
 #endif
