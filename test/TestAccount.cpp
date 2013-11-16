@@ -27,6 +27,8 @@ TEST(TestAccount, shouldCompareEqualityBasedOnlyOnUuid) {
   Account a1DiffUuid(ANOTHER_UUID);
   a1DiffUuid.setName("a1");
 
+  // when
+
   // then
   ASSERT_TRUE(a1 == a1);
   ASSERT_TRUE(a1 == a2);

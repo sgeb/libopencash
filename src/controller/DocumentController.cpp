@@ -16,6 +16,7 @@
 using namespace odb::core;
 
 using opencash::model::Account;
+using opencash::model::AccountType;
 using opencash::model::AccountsMeta;
 
 using std::string;
@@ -78,9 +79,17 @@ namespace opencash { namespace controller {
 
   void DocumentController::initializeDocument()
   {
+    unique_ptr<Account> acc(newAccount());
+    acc->setName("Root Account");
+    acc->setDescription("A pseudo account to represent the root of the account structure");
+    acc->setType(AccountType::Root);
+
     transaction t(_db->begin());
     schema_catalog::create_schema(*_db);
+    _db->persist(*acc);
     t.commit();
+
+    updateAccountsMeta();
   }
 
   void DocumentController::updateAccountsMeta()
