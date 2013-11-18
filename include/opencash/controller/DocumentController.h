@@ -15,6 +15,7 @@ using opencash::model::AccountsMeta;
 
 using std::string;
 using std::unique_ptr;
+using std::shared_ptr;
 using std::vector;
 
 namespace opencash { namespace controller {
@@ -27,8 +28,8 @@ namespace opencash { namespace controller {
 
     public: // related to Accounts
       AccountsMeta * getAccountsMeta() const;
-      unique_ptr<vector<unique_ptr<Account>>> retrieveAccounts() const;
-      unique_ptr<Account> newAccount() const;
+      unique_ptr<vector<shared_ptr<Account>>> retrieveAccounts() const;
+      shared_ptr<Account> newAccount() const;
       void persistAccount(const Account & account);
 
     private: // private methods

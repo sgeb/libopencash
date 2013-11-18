@@ -9,20 +9,43 @@ using namespace std;
 
 const string A_UUID = "a_uuid";
 const string ANOTHER_UUID = "another_uuid";
+const string YET_ANOTHER_UUID = "yet_another_uuid";
 
-TEST(TestAccount, shouldBuildAccountHierarchy) {
+TEST(TestAccount, shouldHaveOneParent) {
   // given
-  shared_ptr<Account> parentAcc(new Account(A_UUID));
-  parentAcc->setName("a1");
+  auto parentAcc = make_shared<Account>(A_UUID);
+  parentAcc->setName("parent");
 
-  Account childAcc(ANOTHER_UUID);
-  childAcc.setName("another1");
+  auto childAcc = make_shared<Account>(ANOTHER_UUID);
+  childAcc->setName("child");
 
   // when
-  childAcc.setParent(parentAcc);
+  childAcc->setParent(parentAcc);
 
   // then
-  ASSERT_EQ(*parentAcc, *childAcc.getParent());
+  ASSERT_EQ(*parentAcc, *childAcc->getParent());
+}
+
+TEST(TestAccount, shouldHaveMultipleChildren) {
+  // given
+  auto parentAcc = make_shared<Account>(A_UUID);
+  parentAcc->setName("parent");
+
+  auto childAcc1 = make_shared<Account>(ANOTHER_UUID);
+  childAcc1->setName("child1");
+
+  auto childAcc2 = make_shared<Account>(YET_ANOTHER_UUID);
+  childAcc2->setName("child2");
+
+  // when
+  childAcc1->setParent(parentAcc);
+  childAcc2->setParent(parentAcc);
+
+  // then
+  auto v = parentAcc->getChildren();
+  auto a = v.at(0);
+  /* ASSERT_EQ(*childAcc1, *(parentAcc->getChildren().at(0).lock())); */
+  /* ASSERT_EQ(*childAcc2, *(parentAcc->getChildren().at(1).lock())); */
 }
 
 TEST(TestAccount, shouldCompareEqualityBasedOnlyOnUuid) {

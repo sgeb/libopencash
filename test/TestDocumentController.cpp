@@ -21,9 +21,9 @@ class TestDocumentController : public ::testing::Test {
     {
     }
 
-    unique_ptr<Account> createAnAssetAccount()
+    shared_ptr<Account> createAnAssetAccount()
     {
-      unique_ptr<Account> ret(_doc->newAccount());
+      auto ret = _doc->newAccount();
       ret->setName("test account");
       ret->setDescription("This is my first asset account");
       ret->setType(AccountType::Asset);
@@ -43,7 +43,7 @@ TEST_F(TestDocumentController, shouldInitializeWithRootAccount) {
 
 TEST_F(TestDocumentController, shouldPersistOneAccount) {
   // given
-  unique_ptr<Account> acc(createAnAssetAccount());
+  auto acc = createAnAssetAccount();
 
   // when
   _doc->persistAccount(*acc);
@@ -54,8 +54,8 @@ TEST_F(TestDocumentController, shouldPersistOneAccount) {
 
 TEST_F(TestDocumentController, shouldPersistTwoAccounts) {
   // given
-  unique_ptr<Account> acc(createAnAssetAccount());
-  unique_ptr<Account> acc2(createAnAssetAccount());
+  auto acc = createAnAssetAccount();
+  auto acc2 = createAnAssetAccount();
 
   // when
   _doc->persistAccount(*acc);
@@ -67,13 +67,13 @@ TEST_F(TestDocumentController, shouldPersistTwoAccounts) {
 
 TEST_F(TestDocumentController, shouldRetrieveAccounts) {
   // given
-  unique_ptr<Account> acc(createAnAssetAccount());
-  unique_ptr<Account> acc2(createAnAssetAccount());
+  auto acc = createAnAssetAccount();
+  auto acc2 = createAnAssetAccount();
   _doc->persistAccount(*acc);
   _doc->persistAccount(*acc2);
 
   // when
-  unique_ptr<vector<unique_ptr<Account>>> accounts = _doc->retrieveAccounts();
+  unique_ptr<vector<shared_ptr<Account>>> accounts = _doc->retrieveAccounts();
 
   // then
   ASSERT_EQ(3, accounts->size());
@@ -85,7 +85,7 @@ TEST_F(TestDocumentController, shouldUpdateAccountsMetaAndFireEvents) {
   // given
   AccountsMeta *accMeta = _doc->getAccountsMeta();
   TestModelObserver obs(*accMeta);
-  unique_ptr<Account> acc(createAnAssetAccount());
+  auto acc = createAnAssetAccount();
 
   // when
   _doc->persistAccount(*acc);

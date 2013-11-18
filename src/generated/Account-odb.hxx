@@ -46,7 +46,7 @@ namespace odb
   {
     public:
     typedef ::opencash::model::Account object_type;
-    typedef ::opencash::model::Account* pointer_type;
+    typedef ::std::shared_ptr< ::opencash::model::Account > pointer_type;
     typedef odb::pointer_traits<pointer_type> pointer_traits;
 
     static const bool polymorphic = false;
@@ -226,6 +226,69 @@ namespace odb
     };
 
     struct extra_statement_cache_type;
+
+    // _children
+    //
+    struct children_traits
+    {
+      static const std::size_t id_column_count = 1UL;
+      static const std::size_t data_column_count = 2UL;
+
+      static const bool versioned = false;
+
+      static const char insert_statement[];
+      static const char select_statement[];
+      static const char delete_statement[];
+
+      typedef ::std::vector< ::std::weak_ptr< ::opencash::model::Account > > container_type;
+      typedef
+      odb::access::container_traits<container_type>
+      container_traits_type;
+      typedef container_traits_type::index_type index_type;
+      typedef container_traits_type::value_type value_type;
+
+      typedef ordered_functions<index_type, value_type> functions_type;
+      typedef sqlite::container_statements< children_traits > statements_type;
+
+      struct data_image_type
+      {
+        // value
+        //
+        details::buffer value_value;
+        std::size_t value_size;
+        bool value_null;
+
+        std::size_t version;
+      };
+
+      static void
+      bind (sqlite::bind*,
+            const sqlite::bind* id,
+            std::size_t id_size,
+            data_image_type&);
+
+      static void
+      grow (data_image_type&,
+            bool*);
+
+      static void
+      init (value_type&,
+            const data_image_type&,
+            database*);
+
+      static void
+      insert (index_type, const value_type&, void*);
+
+      static bool
+      select (index_type&, value_type&, void*);
+
+      static void
+      delete_ (void*);
+
+      static void
+      load (container_type&,
+            statements_type&);
+    };
 
     struct parent_tag;
 

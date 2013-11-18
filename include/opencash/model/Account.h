@@ -9,6 +9,8 @@
 #include <memory>
 
 using std::shared_ptr;
+using std::weak_ptr;
+using std::vector;
 
 namespace opencash { namespace model {
 
@@ -22,8 +24,11 @@ namespace opencash { namespace model {
     Equity,
   };
 
-  #pragma db object table("accounts")
-  class Account : public ObservableModel {
+  #pragma db object table("accounts") pointer(std::shared_ptr)
+  class Account :
+    public ::std::enable_shared_from_this<Account>,
+    public ObservableModel
+  {
     friend class odb::access;
 
     public:
@@ -42,8 +47,9 @@ namespace opencash { namespace model {
       void setType(AccountType type);
 
       shared_ptr<Account> getParent() const;
-      void setParent(Account & parent);
       void setParent(shared_ptr<Account> parent);
+
+      const vector<weak_ptr<Account>> & getChildren() const;
 
     private:
       Account();
@@ -62,6 +68,9 @@ namespace opencash { namespace model {
 
       #pragma db set(setParent)
       shared_ptr<Account> _parent;
+
+      #pragma db value_not_null inverse(_parent) //set(setChildren)
+      vector<weak_ptr<Account>> _children;
   };
 
 }}

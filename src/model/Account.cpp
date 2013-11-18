@@ -69,8 +69,16 @@ namespace opencash { namespace model {
   void Account::setParent(shared_ptr<Account> parent)
   {
     willChangeValueForKey("parent");
+    if (parent) {
+      parent->_children.push_back(shared_from_this());
+    }
     _parent = parent;
     didChangeValueForKey("parent");
+  }
+
+  const vector<weak_ptr<Account>> & Account::getChildren() const
+  {
+    return _children;
   }
 
 }}
