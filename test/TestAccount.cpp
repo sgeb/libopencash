@@ -11,7 +11,7 @@ const string A_UUID = "a_uuid";
 const string ANOTHER_UUID = "another_uuid";
 const string YET_ANOTHER_UUID = "yet_another_uuid";
 
-TEST(TestAccount, shouldHaveOneParent) {
+TEST(TestAccount, shouldAllowOneParent) {
   // given
   auto parentAcc = make_shared<Account>(A_UUID);
   parentAcc->setName("parent");
@@ -26,7 +26,7 @@ TEST(TestAccount, shouldHaveOneParent) {
   ASSERT_EQ(*parentAcc, *childAcc->getParent());
 }
 
-TEST(TestAccount, shouldHaveMultipleChildren) {
+TEST(TestAccount, shouldAllowMultipleChildren) {
   // given
   auto parentAcc = make_shared<Account>(A_UUID);
   parentAcc->setName("parent");
@@ -42,10 +42,8 @@ TEST(TestAccount, shouldHaveMultipleChildren) {
   childAcc2->setParent(parentAcc);
 
   // then
-  auto v = parentAcc->getChildren();
-  auto a = v.at(0);
-  /* ASSERT_EQ(*childAcc1, *(parentAcc->getChildren().at(0).lock())); */
-  /* ASSERT_EQ(*childAcc2, *(parentAcc->getChildren().at(1).lock())); */
+  ASSERT_EQ(*childAcc1, *(parentAcc->getChildren().at(0).lock()));
+  ASSERT_EQ(*childAcc2, *(parentAcc->getChildren().at(1).lock()));
 }
 
 TEST(TestAccount, shouldCompareEqualityBasedOnlyOnUuid) {
