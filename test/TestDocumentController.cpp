@@ -1,13 +1,15 @@
 #include "opencash/controller/DocumentController.h"
 #include "opencash/model/Account.h"
 #include "opencash/model/AccountsMeta.h"
-#include "support/TestModelObserver.h"
+#include "mock/MockModelObserver.h"
 
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 using namespace opencash::controller;
 using namespace opencash::model;
 using namespace std;
+using namespace ::testing;
 
 const string DBFILENAME = ":memory:";
 /* const string DBFILENAME = "Test.db"; */
@@ -84,13 +86,16 @@ TEST_F(TestDocumentController, shouldRetrieveAccounts) {
 TEST_F(TestDocumentController, shouldUpdateAccountsMetaAndFireEvents) {
   // given
   AccountsMeta *accMeta = _doc->getAccountsMeta();
-  TestModelObserver obs(*accMeta);
+  MockModelObserver obs(*accMeta);
+  {
+    InSequence dummy;
+    EXPECT_CALL(obs, willChangeValueForKey("count"));
+    EXPECT_CALL(obs, didChangeValueForKey("count"));
+  }
   auto acc = createAnAssetAccount();
 
   // when
   _doc->persistAccount(*acc);
 
-  // then
-  ASSERT_TRUE(obs.hasWillChangeValueBeenFiredForKey("count"));
-  ASSERT_TRUE(obs.hasDidChangeValueBeenFiredForKey("count"));
+  // then (mock expectations implicitly verified)
 }

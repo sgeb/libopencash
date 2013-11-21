@@ -3,10 +3,12 @@ set(GMOCK_LIBS gmock gmock_main)
 
 include_directories(
   ${GTEST_INCLUDE_DIRS}
+  ${GMOCK_INCLUDE_DIRS}
 )
 
 link_directories(
   ${GTEST_LIBS_DIR}
+  ${GMOCK_LIBS_DIR}
 )
 
 #
@@ -15,11 +17,11 @@ link_directories(
 
 add_executable(TestAccount
   TestAccount.cpp
-  support/TestModelObserver.cpp
 )
 target_link_libraries(TestAccount
   ${OC_LIB_NAME}
   ${GTEST_LIBS}
+  ${GMOCK_LIBS}
 )
 add_test(TestAccount TestAccount)
 
@@ -29,10 +31,10 @@ add_test(TestAccount TestAccount)
 
 add_executable(TestDocumentController
   TestDocumentController.cpp
-  support/TestModelObserver.cpp
 )
 target_link_libraries(TestDocumentController
   ${OC_LIB_NAME}
   ${GTEST_LIBS}
+  ${GMOCK_LIBS}
 )
 add_test(TestDocumentController TestDocumentController)

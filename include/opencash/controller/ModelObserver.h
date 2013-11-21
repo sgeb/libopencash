@@ -13,6 +13,7 @@ namespace opencash { namespace controller {
   class ModelObserver {
     public:
       ModelObserver(model::ObservableModel & model);
+      virtual ~ModelObserver();
 
     protected:
       virtual void willChangeValueForKey(const string & key) = 0;

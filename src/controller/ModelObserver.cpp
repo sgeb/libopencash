@@ -13,4 +13,6 @@ namespace opencash { namespace controller {
       Poco::delegate(this, &ModelObserver::didChangeValueForKey);
   }
 
+  ModelObserver::~ModelObserver() {}
+
 }}

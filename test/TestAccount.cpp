@@ -1,11 +1,12 @@
 #include "opencash/model/Account.h"
-#include "opencash/controller/ModelObserver.h"
-#include "support/TestModelObserver.h"
+#include "mock/MockModelObserver.h"
 
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 using namespace opencash::model;
 using namespace std;
+using namespace ::testing;
 
 const string A_UUID = "a_uuid";
 const string ANOTHER_UUID = "another_uuid";
@@ -74,26 +75,28 @@ TEST(TestAccount, shouldCompareEqualityBasedOnlyOnUuid) {
   ASSERT_FALSE(a1 == a1DiffUuid);
 }
 
-TEST(TestAccount, shouldTriggerObserverEvents) {
+TEST(TestAccount, shouldTriggerMemberObserverEvents) {
   // given
   Account acc(A_UUID);
-  TestModelObserver obs(acc);
+  MockModelObserver obs(acc);
+
+  {
+    InSequence dummy;
+
+    EXPECT_CALL(obs, willChangeValueForKey("name"));
+    EXPECT_CALL(obs, didChangeValueForKey("name"));
+
+    EXPECT_CALL(obs, willChangeValueForKey("description"));
+    EXPECT_CALL(obs, didChangeValueForKey("description"));
+
+    EXPECT_CALL(obs, willChangeValueForKey("type"));
+    EXPECT_CALL(obs, didChangeValueForKey("type"));
+  }
 
   // when
   acc.setName("A name");
   acc.setDescription("A description");
   acc.setType(AccountType::Asset);
 
-  // then
-  ASSERT_FALSE(obs.hasWillChangeValueBeenFiredForKey("fake"));
-  ASSERT_FALSE(obs.hasDidChangeValueBeenFiredForKey("fake"));
-
-  ASSERT_TRUE(obs.hasWillChangeValueBeenFiredForKey("name"));
-  ASSERT_TRUE(obs.hasDidChangeValueBeenFiredForKey("name"));
-
-  ASSERT_TRUE(obs.hasWillChangeValueBeenFiredForKey("description"));
-  ASSERT_TRUE(obs.hasDidChangeValueBeenFiredForKey("description"));
-
-  ASSERT_TRUE(obs.hasWillChangeValueBeenFiredForKey("type"));
-  ASSERT_TRUE(obs.hasDidChangeValueBeenFiredForKey("type"));
+  // then (mock expectations implicitly verified)
 }
