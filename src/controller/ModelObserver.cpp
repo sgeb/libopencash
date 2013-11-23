@@ -33,6 +33,10 @@ namespace opencash { namespace controller {
       MyDelegate(this, &ModelObserver::didChangeAtIndex);
   }
 
+  model::ObservableModel & ModelObserver::getModel() const {
+    return _model;
+  }
+
   void ModelObserver::willChange(const EventArgs & args)
   {
     willChange(args.key);

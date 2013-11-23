@@ -18,7 +18,7 @@ namespace opencash { namespace controller {
       virtual ~ModelObserver();
 
     protected:
-      model::ObservableModel & _model;
+      model::ObservableModel & getModel() const;
 
       virtual void willChange(const string & key) = 0;
       virtual void didChange(const string & key) = 0;
@@ -30,6 +30,8 @@ namespace opencash { namespace controller {
           const size_t & index, const ChangeType & change) = 0;
 
     private:
+      model::ObservableModel & _model;
+
       void willChange(const EventArgs & args);
       void didChange(const EventArgs & args);
       void willChangeAtIndex(const EventArgs & args);
