@@ -100,3 +100,44 @@ TEST(TestAccount, shouldTriggerMemberObserverEvents) {
 
   // then (mock expectations implicitly verified)
 }
+
+TEST(TestAccount, shouldTriggerParentChildrenObserverEvents) {
+  // given
+  auto parentAcc = make_shared<Account>(A_UUID);
+  MockModelObserver parentObs(*parentAcc);
+
+  auto childAcc1 = make_shared<Account>(ANOTHER_UUID);
+  MockModelObserver childObs1(*childAcc1);
+
+  auto childAcc2 = make_shared<Account>(YET_ANOTHER_UUID);
+  MockModelObserver childObs2(*childAcc2);
+
+  {
+    using opencash::model::ObservableModel::ObservedChange::Insertion;
+    using opencash::model::ObservableModel::ObservedChange::Removal;
+
+    InSequence dummy;
+
+    EXPECT_CALL(childObs1, willChangeValueForKey("parent"));
+    EXPECT_CALL(parentObs, willChangeIndexedValueForKey("children", 0, Insertion));
+    EXPECT_CALL(parentObs, didChangeIndexedValueForKey("children", 0, Insertion));
+    EXPECT_CALL(childObs1, didChangeValueForKey("parent"));
+
+    EXPECT_CALL(childObs2, willChangeValueForKey("parent"));
+    EXPECT_CALL(parentObs, willChangeIndexedValueForKey("children", 1, Insertion));
+    EXPECT_CALL(parentObs, didChangeIndexedValueForKey("children", 1, Insertion));
+    EXPECT_CALL(childObs2, didChangeValueForKey("parent"));
+
+    EXPECT_CALL(childObs1, willChangeValueForKey("parent"));
+    EXPECT_CALL(parentObs, willChangeIndexedValueForKey("children", 0, Removal));
+    EXPECT_CALL(parentObs, didChangeIndexedValueForKey("children", 0, Removal));
+    EXPECT_CALL(childObs1, didChangeValueForKey("parent"));
+  }
+
+  // when
+  childAcc1->setParent(parentAcc);
+  childAcc2->setParent(parentAcc);
+  childAcc1->setParent(NULL);
+
+  // then (mock expectations implicitly verified)
+}

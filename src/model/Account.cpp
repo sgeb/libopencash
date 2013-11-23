@@ -68,12 +68,47 @@ namespace opencash { namespace model {
 
   void Account::setParent(shared_ptr<Account> parent)
   {
-    if (parent) {
-      auto thisPtr = shared_from_this();
-      parent->_children.push_back(thisPtr);
-    }
+    if (&*parent == &*_parent) { return; }
+
+    using ObservedChange = opencash::model::ObservableModel::ObservedChange;
 
     willChangeValueForKey("parent");
+
+    // unregister from previous parent
+    if (_parent) {
+      auto index = std::numeric_limits<std::size_t>::max();
+
+      auto children = _parent->_children;
+      auto child = find_if(children.cbegin(), children.cend(),
+          [this](decltype(*children.cbegin()) item) {
+            return (&*(item.lock()) == this);
+          });
+      if (child != children.cend()) {
+        index = child - children.cbegin();
+
+        _parent->willChangeIndexedValueForKey("children", index,
+            ObservedChange::Removal);
+
+        children.erase(child);
+
+        _parent->didChangeIndexedValueForKey("children", index,
+            ObservedChange::Removal);
+      }
+    }
+
+    // register with new parent
+    if (parent) {
+      auto index = parent->_children.size();
+
+      parent->willChangeIndexedValueForKey("children", index,
+          ObservedChange::Insertion);
+
+      parent->_children.push_back(shared_from_this());
+
+      parent->didChangeIndexedValueForKey("children", index,
+          ObservedChange::Insertion);
+    }
+
     _parent = parent;
     didChangeValueForKey("parent");
   }
