@@ -83,14 +83,14 @@ TEST(TestAccount, shouldTriggerMemberObserverEvents) {
   {
     InSequence dummy;
 
-    EXPECT_CALL(obs, willChangeValueForKey("name"));
-    EXPECT_CALL(obs, didChangeValueForKey("name"));
+    EXPECT_CALL(obs, willChange("name"));
+    EXPECT_CALL(obs, didChange("name"));
 
-    EXPECT_CALL(obs, willChangeValueForKey("description"));
-    EXPECT_CALL(obs, didChangeValueForKey("description"));
+    EXPECT_CALL(obs, willChange("description"));
+    EXPECT_CALL(obs, didChange("description"));
 
-    EXPECT_CALL(obs, willChangeValueForKey("type"));
-    EXPECT_CALL(obs, didChangeValueForKey("type"));
+    EXPECT_CALL(obs, willChange("type"));
+    EXPECT_CALL(obs, didChange("type"));
   }
 
   // when
@@ -113,25 +113,25 @@ TEST(TestAccount, shouldTriggerParentChildrenObserverEvents) {
   MockModelObserver childObs2(*childAcc2);
 
   {
-    using opencash::model::ObservableModel::ObservedChange::Insertion;
-    using opencash::model::ObservableModel::ObservedChange::Removal;
+    using opencash::model::ObservableModel::ChangeType::Insertion;
+    using opencash::model::ObservableModel::ChangeType::Removal;
 
     InSequence dummy;
 
-    EXPECT_CALL(childObs1, willChangeValueForKey("parent"));
-    EXPECT_CALL(parentObs, willChangeIndexedValueForKey("children", 0, Insertion));
-    EXPECT_CALL(parentObs, didChangeIndexedValueForKey("children", 0, Insertion));
-    EXPECT_CALL(childObs1, didChangeValueForKey("parent"));
+    EXPECT_CALL(childObs1, willChange("parent"));
+    EXPECT_CALL(parentObs, willChangeAtIndex("children", 0, Insertion));
+    EXPECT_CALL(parentObs, didChangeAtIndex("children", 0, Insertion));
+    EXPECT_CALL(childObs1, didChange("parent"));
 
-    EXPECT_CALL(childObs2, willChangeValueForKey("parent"));
-    EXPECT_CALL(parentObs, willChangeIndexedValueForKey("children", 1, Insertion));
-    EXPECT_CALL(parentObs, didChangeIndexedValueForKey("children", 1, Insertion));
-    EXPECT_CALL(childObs2, didChangeValueForKey("parent"));
+    EXPECT_CALL(childObs2, willChange("parent"));
+    EXPECT_CALL(parentObs, willChangeAtIndex("children", 1, Insertion));
+    EXPECT_CALL(parentObs, didChangeAtIndex("children", 1, Insertion));
+    EXPECT_CALL(childObs2, didChange("parent"));
 
-    EXPECT_CALL(childObs1, willChangeValueForKey("parent"));
-    EXPECT_CALL(parentObs, willChangeIndexedValueForKey("children", 0, Removal));
-    EXPECT_CALL(parentObs, didChangeIndexedValueForKey("children", 0, Removal));
-    EXPECT_CALL(childObs1, didChangeValueForKey("parent"));
+    EXPECT_CALL(childObs1, willChange("parent"));
+    EXPECT_CALL(parentObs, willChangeAtIndex("children", 0, Removal));
+    EXPECT_CALL(parentObs, didChangeAtIndex("children", 0, Removal));
+    EXPECT_CALL(childObs1, didChange("parent"));
   }
 
   // when

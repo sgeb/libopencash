@@ -12,7 +12,7 @@ namespace opencash { namespace model {
 
   class ObservableModel {
     public:
-      enum class ObservedChange {
+      enum class ChangeType {
         Setting,      // when setting to-one properties
         Insertion,    // when inserting an element into to-many properties
         Removal,      // when removing an element from to-many properties
@@ -22,30 +22,25 @@ namespace opencash { namespace model {
       class EventArgs {
         public:
           EventArgs(string k, size_t i = 0,
-              ObservedChange c = ObservedChange::Setting)
+              ChangeType c = ChangeType::Setting)
             : key(k), index(i), change(c) {}
 
           string key;
           size_t index;
-          ObservedChange change;
+          ChangeType change;
       };
 
     public:
-      BasicEvent<const EventArgs> willChangeValueForKeyEvent;
-      BasicEvent<const EventArgs> didChangeValueForKeyEvent;
-
-      BasicEvent<const EventArgs> willChangeIndexedValueForKeyEvent;
-      BasicEvent<const EventArgs> didChangeIndexedValueForKeyEvent;
+      BasicEvent<const EventArgs> willChangeEvent;
+      BasicEvent<const EventArgs> didChangeEvent;
+      BasicEvent<const EventArgs> willChangeAtIndexEvent;
+      BasicEvent<const EventArgs> didChangeAtIndexEvent;
 
     protected:
-      void willChangeValueForKey(string key);
-      void didChangeValueForKey(string key);
-
-      void willChangeIndexedValueForKey(string key, size_t index,
-          ObservedChange change);
-
-      void didChangeIndexedValueForKey(string key, size_t index,
-          ObservedChange change);
+      void willChange(string key);
+      void didChange(string key);
+      void willChangeAtIndex(string key, size_t index, ChangeType change);
+      void didChangeAtIndex(string key, size_t index, ChangeType change);
   };
 
 }}

@@ -12,21 +12,24 @@ namespace opencash { namespace model {
 
 using opencash::controller::ModelObserver;
 using opencash::model::ObservableModel;
-using ObservedChange = opencash::model::ObservableModel::ObservedChange;
+using ChangeType = opencash::model::ObservableModel::ChangeType;
 
 class MockModelObserver : public ModelObserver {
- public:
-   MockModelObserver(ObservableModel & model)
-     : ModelObserver(model) {}
+  public:
+    MockModelObserver(ObservableModel & model) : ModelObserver(model) {}
 
-  MOCK_METHOD1(willChangeValueForKey, void(const std::string & key));
-  MOCK_METHOD1(didChangeValueForKey, void(const std::string & key));
+    MOCK_METHOD1(willChange, void(const std::string & key));
+    MOCK_METHOD1(didChange, void(const std::string & key));
 
-  MOCK_METHOD3(willChangeIndexedValueForKey,
-      void(const std::string & key, const std::size_t & index, const ObservedChange & change));
+    MOCK_METHOD3(willChangeAtIndex,
+        void(const std::string & key,
+          const std::size_t & index,
+          const ChangeType & change));
 
-  MOCK_METHOD3(didChangeIndexedValueForKey,
-      void(const std::string & key, const std::size_t & index, const ObservedChange & change));
+    MOCK_METHOD3(didChangeAtIndex,
+        void(const std::string & key,
+          const std::size_t & index,
+          const ChangeType & change));
 };
 
 #endif

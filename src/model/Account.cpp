@@ -6,14 +6,8 @@ using std::shared_ptr;
 
 namespace opencash { namespace model {
 
-  Account::Account(const std::string & uuid)
-    : _uuid(uuid)
-  {
-  }
-
-  Account::Account()
-  {
-  }
+  Account::Account(const std::string & uuid) : _uuid(uuid) {}
+  Account::Account() {}
 
   bool Account::operator==(const Account & rhs) const
   {
@@ -32,9 +26,9 @@ namespace opencash { namespace model {
 
   void Account::setName(std::string name)
   {
-    willChangeValueForKey("name");
+    willChange("name");
     _name = name;
-    didChangeValueForKey("name");
+    didChange("name");
   }
 
   std::string Account::getDescription() const
@@ -44,9 +38,9 @@ namespace opencash { namespace model {
 
   void Account::setDescription(std::string description)
   {
-    willChangeValueForKey("description");
+    willChange("description");
     _description = description;
-    didChangeValueForKey("description");
+    didChange("description");
   }
 
   AccountType Account::getType() const
@@ -56,9 +50,9 @@ namespace opencash { namespace model {
 
   void Account::setType(AccountType type)
   {
-    willChangeValueForKey("type");
+    willChange("type");
     _type = type;
-    didChangeValueForKey("type");
+    didChange("type");
   }
 
   shared_ptr<Account> Account::getParent() const
@@ -70,9 +64,9 @@ namespace opencash { namespace model {
   {
     if (&*parent == &*_parent) { return; }
 
-    using ObservedChange = opencash::model::ObservableModel::ObservedChange;
+    using ChangeType = opencash::model::ObservableModel::ChangeType;
 
-    willChangeValueForKey("parent");
+    willChange("parent");
 
     // unregister from previous parent
     if (_parent) {
@@ -86,13 +80,9 @@ namespace opencash { namespace model {
       if (child != children.cend()) {
         index = child - children.cbegin();
 
-        _parent->willChangeIndexedValueForKey("children", index,
-            ObservedChange::Removal);
-
+        _parent->willChangeAtIndex("children", index, ChangeType::Removal);
         children.erase(child);
-
-        _parent->didChangeIndexedValueForKey("children", index,
-            ObservedChange::Removal);
+        _parent->didChangeAtIndex("children", index, ChangeType::Removal);
       }
     }
 
@@ -100,17 +90,13 @@ namespace opencash { namespace model {
     if (parent) {
       auto index = parent->_children.size();
 
-      parent->willChangeIndexedValueForKey("children", index,
-          ObservedChange::Insertion);
-
+      parent->willChangeAtIndex("children", index, ChangeType::Insertion);
       parent->_children.push_back(shared_from_this());
-
-      parent->didChangeIndexedValueForKey("children", index,
-          ObservedChange::Insertion);
+      parent->didChangeAtIndex("children", index, ChangeType::Insertion);
     }
 
     _parent = parent;
-    didChangeValueForKey("parent");
+    didChange("parent");
   }
 
   const vector<weak_ptr<Account>> & Account::getChildren() const

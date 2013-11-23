@@ -12,9 +12,9 @@ namespace opencash { namespace model {
 
   void AccountsMeta::setCount(std::size_t count)
   {
-    willChangeValueForKey("count");
+    willChange("count");
     _count = count;
-    didChangeValueForKey("count");
+    didChange("count");
   }
 
 }}

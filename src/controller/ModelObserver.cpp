@@ -9,52 +9,48 @@ namespace opencash { namespace controller {
   ModelObserver::ModelObserver(model::ObservableModel & model) :
     _model(model)
   {
-    _model.willChangeValueForKeyEvent +=
-      MyDelegate(this, &ModelObserver::willChangeValueForKey);
+    _model.willChangeEvent += MyDelegate(this, &ModelObserver::willChange);
 
-    _model.didChangeValueForKeyEvent +=
-      MyDelegate(this, &ModelObserver::didChangeValueForKey);
+    _model.didChangeEvent += MyDelegate(this, &ModelObserver::didChange);
 
-    _model.willChangeIndexedValueForKeyEvent +=
-      MyDelegate(this, &ModelObserver::willChangeIndexedValueForKey);
+    _model.willChangeAtIndexEvent +=
+      MyDelegate(this, &ModelObserver::willChangeAtIndex);
 
-    _model.didChangeIndexedValueForKeyEvent +=
-      MyDelegate(this, &ModelObserver::didChangeIndexedValueForKey);
+    _model.didChangeAtIndexEvent +=
+      MyDelegate(this, &ModelObserver::didChangeAtIndex);
   }
 
   ModelObserver::~ModelObserver()
   {
-    _model.willChangeValueForKeyEvent -=
-      MyDelegate(this, &ModelObserver::willChangeValueForKey);
+    _model.willChangeEvent -= MyDelegate(this, &ModelObserver::willChange);
 
-    _model.didChangeValueForKeyEvent -=
-      MyDelegate(this, &ModelObserver::didChangeValueForKey);
+    _model.didChangeEvent -= MyDelegate(this, &ModelObserver::didChange);
 
-    _model.willChangeIndexedValueForKeyEvent -=
-      MyDelegate(this, &ModelObserver::willChangeIndexedValueForKey);
+    _model.willChangeAtIndexEvent -=
+      MyDelegate(this, &ModelObserver::willChangeAtIndex);
 
-    _model.didChangeIndexedValueForKeyEvent -=
-      MyDelegate(this, &ModelObserver::didChangeIndexedValueForKey);
+    _model.didChangeAtIndexEvent -=
+      MyDelegate(this, &ModelObserver::didChangeAtIndex);
   }
 
-  void ModelObserver::willChangeValueForKey(const EventArgs & args)
+  void ModelObserver::willChange(const EventArgs & args)
   {
-    willChangeValueForKey(args.key);
+    willChange(args.key);
   }
 
-  void ModelObserver::didChangeValueForKey(const EventArgs & args)
+  void ModelObserver::didChange(const EventArgs & args)
   {
-    didChangeValueForKey(args.key);
+    didChange(args.key);
   }
 
-  void ModelObserver::willChangeIndexedValueForKey(const EventArgs & args)
+  void ModelObserver::willChangeAtIndex(const EventArgs & args)
   {
-    willChangeIndexedValueForKey(args.key, args.index, args.change);
+    willChangeAtIndex(args.key, args.index, args.change);
   }
 
-  void ModelObserver::didChangeIndexedValueForKey(const EventArgs & args)
+  void ModelObserver::didChangeAtIndex(const EventArgs & args)
   {
-    didChangeIndexedValueForKey(args.key, args.index, args.change);
+    didChangeAtIndex(args.key, args.index, args.change);
   }
 
 }}

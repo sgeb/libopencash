@@ -7,7 +7,7 @@
 
 using std::string;
 using opencash::model::ObservableModel;
-using ObservedChange = opencash::model::ObservableModel::ObservedChange;
+using ChangeType = opencash::model::ObservableModel::ChangeType;
 using EventArgs = opencash::model::ObservableModel::EventArgs;
 
 namespace opencash { namespace controller {
@@ -20,20 +20,20 @@ namespace opencash { namespace controller {
     protected:
       model::ObservableModel & _model;
 
-      virtual void willChangeValueForKey(const string & key) = 0;
-      virtual void didChangeValueForKey(const string & key) = 0;
+      virtual void willChange(const string & key) = 0;
+      virtual void didChange(const string & key) = 0;
 
-      virtual void willChangeIndexedValueForKey(const string & key,
-          const size_t & index, const ObservedChange & change) = 0;
+      virtual void willChangeAtIndex(const string & key,
+          const size_t & index, const ChangeType & change) = 0;
 
-      virtual void didChangeIndexedValueForKey(const string & key,
-          const size_t & index, const ObservedChange & change) = 0;
+      virtual void didChangeAtIndex(const string & key,
+          const size_t & index, const ChangeType & change) = 0;
 
     private:
-      void willChangeValueForKey(const EventArgs & args);
-      void didChangeValueForKey(const EventArgs & args);
-      void willChangeIndexedValueForKey(const EventArgs & args);
-      void didChangeIndexedValueForKey(const EventArgs & args);
+      void willChange(const EventArgs & args);
+      void didChange(const EventArgs & args);
+      void willChangeAtIndex(const EventArgs & args);
+      void didChangeAtIndex(const EventArgs & args);
   };
 
 }}

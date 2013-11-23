@@ -4,28 +4,26 @@ namespace opencash { namespace model {
 
   using std::string;
 
-  void ObservableModel::willChangeValueForKey(string key)
+  void ObservableModel::willChange(string key)
   {
-    willChangeValueForKeyEvent.notify(this, EventArgs(key));
+    willChangeEvent.notify(this, EventArgs(key));
   }
 
-  void ObservableModel::didChangeValueForKey(string key)
+  void ObservableModel::didChange(string key)
   {
-    didChangeValueForKeyEvent.notify(this, EventArgs(key));
+    didChangeEvent.notify(this, EventArgs(key));
   }
 
-  void ObservableModel::willChangeIndexedValueForKey(string key, size_t index,
-      ObservedChange change)
+  void ObservableModel::willChangeAtIndex(string key, size_t index,
+      ChangeType change)
   {
-    willChangeIndexedValueForKeyEvent.notify(this,
-        EventArgs(key, index, change));
+    willChangeAtIndexEvent.notify(this, EventArgs(key, index, change));
   }
 
-  void ObservableModel::didChangeIndexedValueForKey(string key, size_t index,
-      ObservedChange change)
+  void ObservableModel::didChangeAtIndex(string key, size_t index,
+      ChangeType change)
   {
-    didChangeIndexedValueForKeyEvent.notify(this,
-        EventArgs(key, index, change));
+    didChangeAtIndexEvent.notify(this, EventArgs(key, index, change));
   }
 
 }}

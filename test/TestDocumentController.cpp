@@ -89,8 +89,8 @@ TEST_F(TestDocumentController, shouldUpdateAccountsMetaAndFireEvents) {
   MockModelObserver obs(*accMeta);
   {
     InSequence dummy;
-    EXPECT_CALL(obs, willChangeValueForKey("count"));
-    EXPECT_CALL(obs, didChangeValueForKey("count"));
+    EXPECT_CALL(obs, willChange("count"));
+    EXPECT_CALL(obs, didChange("count"));
   }
   auto acc = createAnAssetAccount();
 
