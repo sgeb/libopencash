@@ -42,8 +42,8 @@ namespace opencash { namespace model {
       std::string getName() const;
       void setName(std::string name);
 
-      std::string getDescription() const;
-      void setDescription(std::string description);
+      std::string getDescr() const;
+      void setDescr(std::string descr);
 
       AccountType getType() const;
       void setType(AccountType type);
@@ -62,8 +62,8 @@ namespace opencash { namespace model {
       #pragma db set(setName)
       std::string _name;
 
-      #pragma db set(setDescription)
-      std::string _description;
+      #pragma db set(setDescr)
+      std::string _descr;
 
       #pragma db set(setType)
       AccountType _type;

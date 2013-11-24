@@ -31,16 +31,16 @@ namespace opencash { namespace model {
     didChange("name");
   }
 
-  std::string Account::getDescription() const
+  std::string Account::getDescr() const
   {
-    return _description;
+    return _descr;
   }
 
-  void Account::setDescription(std::string description)
+  void Account::setDescr(std::string descr)
   {
-    willChange("description");
-    _description = description;
-    didChange("description");
+    willChange("descr");
+    _descr = descr;
+    didChange("descr");
   }
 
   AccountType Account::getType() const

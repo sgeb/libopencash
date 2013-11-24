@@ -79,7 +79,7 @@ namespace opencash { namespace controller {
   {
     auto acc = newAccount();
     acc->setName("Root Account");
-    acc->setDescription("A pseudo account to represent the root of the account structure");
+    acc->setDescr("A pseudo account to represent the root of the account structure");
     acc->setType(AccountType::Root);
 
     transaction t(_db->begin());

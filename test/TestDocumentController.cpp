@@ -30,7 +30,7 @@ class TestDocumentController : public ::testing::Test {
     {
       AccountPtr ret = _doc->newAccount();
       ret->setName("test account");
-      ret->setDescription("This is my first asset account");
+      ret->setDescr("This is my first asset account");
       ret->setType(AccountType::Asset);
       return ret;
     }

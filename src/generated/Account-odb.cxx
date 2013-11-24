@@ -285,11 +285,11 @@ namespace odb
       grew = true;
     }
 
-    // _description
+    // _descr
     //
     if (t[2UL])
     {
-      i._description_value.capacity (i._description_size);
+      i._descr_value.capacity (i._descr_size);
       grew = true;
     }
 
@@ -344,15 +344,15 @@ namespace odb
     b[n].is_null = &i._name_null;
     n++;
 
-    // _description
+    // _descr
     //
     b[n].type = sqlite::image_traits<
       ::std::string,
       sqlite::id_text>::bind_value;
-    b[n].buffer = i._description_value.data ();
-    b[n].size = &i._description_size;
-    b[n].capacity = i._description_value.capacity ();
-    b[n].is_null = &i._description_null;
+    b[n].buffer = i._descr_value.data ();
+    b[n].size = &i._descr_size;
+    b[n].capacity = i._descr_value.capacity ();
+    b[n].is_null = &i._descr_null;
     n++;
 
     // _type
@@ -439,23 +439,23 @@ namespace odb
       grew = grew || (cap != i._name_value.capacity ());
     }
 
-    // _description
+    // _descr
     //
     {
       ::std::string const& v =
-        o._description;
+        o._descr;
 
       bool is_null (false);
-      std::size_t cap (i._description_value.capacity ());
+      std::size_t cap (i._descr_value.capacity ());
       sqlite::value_traits<
           ::std::string,
           sqlite::id_text >::set_image (
-        i._description_value,
-        i._description_size,
+        i._descr_value,
+        i._descr_size,
         is_null,
         v);
-      i._description_null = is_null;
-      grew = grew || (cap != i._description_value.capacity ());
+      i._descr_null = is_null;
+      grew = grew || (cap != i._descr_value.capacity ());
     }
 
     // _type
@@ -549,7 +549,7 @@ namespace odb
       o.setName (v);
     }
 
-    // _description
+    // _descr
     //
     {
       // From Account.h:65:18
@@ -559,12 +559,12 @@ namespace odb
           ::std::string,
           sqlite::id_text >::set_value (
         v,
-        i._description_value,
-        i._description_size,
-        i._description_null);
+        i._descr_value,
+        i._descr_size,
+        i._descr_null);
 
       // From Account.h:65:18
-      o.setDescription (v);
+      o.setDescr (v);
     }
 
     // _type
@@ -646,7 +646,7 @@ namespace odb
   "INSERT INTO \"accounts\" "
   "(\"uuid\", "
   "\"name\", "
-  "\"description\", "
+  "\"descr\", "
   "\"type\", "
   "\"parent\") "
   "VALUES "
@@ -656,7 +656,7 @@ namespace odb
   "SELECT "
   "\"accounts\".\"uuid\", "
   "\"accounts\".\"name\", "
-  "\"accounts\".\"description\", "
+  "\"accounts\".\"descr\", "
   "\"accounts\".\"type\", "
   "\"accounts\".\"parent\" "
   "FROM \"accounts\" "
@@ -666,7 +666,7 @@ namespace odb
   "UPDATE \"accounts\" "
   "SET "
   "\"name\"=?, "
-  "\"description\"=?, "
+  "\"descr\"=?, "
   "\"type\"=?, "
   "\"parent\"=? "
   "WHERE \"uuid\"=?";
@@ -679,7 +679,7 @@ namespace odb
   "SELECT\n"
   "\"accounts\".\"uuid\",\n"
   "\"accounts\".\"name\",\n"
-  "\"accounts\".\"description\",\n"
+  "\"accounts\".\"descr\",\n"
   "\"accounts\".\"type\",\n"
   "\"accounts\".\"parent\"\n"
   "FROM \"accounts\"\n"
@@ -1120,7 +1120,7 @@ namespace odb
           db.execute ("CREATE TABLE \"accounts\" (\n"
                       "  \"uuid\" TEXT NOT NULL PRIMARY KEY,\n"
                       "  \"name\" TEXT NOT NULL,\n"
-                      "  \"description\" TEXT NOT NULL,\n"
+                      "  \"descr\" TEXT NOT NULL,\n"
                       "  \"type\" INTEGER NOT NULL,\n"
                       "  \"parent\" TEXT NULL,\n"
                       "  CONSTRAINT \"parent_fk\"\n"

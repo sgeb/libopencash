@@ -115,7 +115,7 @@ namespace odb
 
     static const name_type_ name;
 
-    // description
+    // descr
     //
     typedef
     sqlite::query_column<
@@ -123,9 +123,9 @@ namespace odb
         ::std::string,
         sqlite::id_text >::query_type,
       sqlite::id_text >
-    description_type_;
+    descr_type_;
 
-    static const description_type_ description;
+    static const descr_type_ descr;
 
     // type
     //
@@ -163,9 +163,9 @@ namespace odb
   name (A::table_name, "\"name\"", 0);
 
   template <typename A>
-  const typename pointer_query_columns< ::opencash::model::Account, id_sqlite, A >::description_type_
+  const typename pointer_query_columns< ::opencash::model::Account, id_sqlite, A >::descr_type_
   pointer_query_columns< ::opencash::model::Account, id_sqlite, A >::
-  description (A::table_name, "\"description\"", 0);
+  descr (A::table_name, "\"descr\"", 0);
 
   template <typename A>
   const typename pointer_query_columns< ::opencash::model::Account, id_sqlite, A >::type_type_
@@ -205,11 +205,11 @@ namespace odb
       std::size_t _name_size;
       bool _name_null;
 
-      // _description
+      // _descr
       //
-      details::buffer _description_value;
-      std::size_t _description_size;
-      bool _description_null;
+      details::buffer _descr_value;
+      std::size_t _descr_size;
+      bool _descr_null;
 
       // _type
       //
@@ -442,7 +442,7 @@ namespace odb
 
     static const name_type_ name;
 
-    // description
+    // descr
     //
     typedef
     sqlite::query_column<
@@ -450,9 +450,9 @@ namespace odb
         ::std::string,
         sqlite::id_text >::query_type,
       sqlite::id_text >
-    description_type_;
+    descr_type_;
 
-    static const description_type_ description;
+    static const descr_type_ descr;
 
     // type
     //
@@ -506,9 +506,9 @@ namespace odb
   name (A::table_name, "\"name\"", 0);
 
   template <typename A>
-  const typename query_columns< ::opencash::model::Account, id_sqlite, A >::description_type_
+  const typename query_columns< ::opencash::model::Account, id_sqlite, A >::descr_type_
   query_columns< ::opencash::model::Account, id_sqlite, A >::
-  description (A::table_name, "\"description\"", 0);
+  descr (A::table_name, "\"descr\"", 0);
 
   template <typename A>
   const typename query_columns< ::opencash::model::Account, id_sqlite, A >::type_type_

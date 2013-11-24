@@ -88,8 +88,8 @@ TEST(TestAccount, shouldTriggerMemberObserverEvents) {
     EXPECT_CALL(obs, willChange("name"));
     EXPECT_CALL(obs, didChange("name"));
 
-    EXPECT_CALL(obs, willChange("description"));
-    EXPECT_CALL(obs, didChange("description"));
+    EXPECT_CALL(obs, willChange("descr"));
+    EXPECT_CALL(obs, didChange("descr"));
 
     EXPECT_CALL(obs, willChange("type"));
     EXPECT_CALL(obs, didChange("type"));
@@ -97,7 +97,7 @@ TEST(TestAccount, shouldTriggerMemberObserverEvents) {
 
   // when
   acc.setName("A name");
-  acc.setDescription("A description");
+  acc.setDescr("A descr");
   acc.setType(AccountType::Asset);
 
   // then (mock expectations implicitly verified)
