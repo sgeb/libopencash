@@ -4,21 +4,22 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-using namespace opencash::model;
-using namespace std;
-using namespace ::testing;
+using Account = opencash::model::Account;
 using AccountType = opencash::model::Account::AccountType;
+using AccountPtr = opencash::model::Account::AccountPtr;
 
-const string A_UUID = "a_uuid";
-const string ANOTHER_UUID = "another_uuid";
-const string YET_ANOTHER_UUID = "yet_another_uuid";
+using InSequence = ::testing::InSequence;
+
+const std::string A_UUID = "a_uuid";
+const std::string ANOTHER_UUID = "another_uuid";
+const std::string YET_ANOTHER_UUID = "yet_another_uuid";
 
 TEST(TestAccount, shouldAllowOneParent) {
   // given
-  auto parentAcc = make_shared<Account>(A_UUID);
+  AccountPtr parentAcc(new Account(A_UUID));
   parentAcc->setName("parent");
 
-  auto childAcc = make_shared<Account>(ANOTHER_UUID);
+  AccountPtr childAcc(new Account(ANOTHER_UUID));
   childAcc->setName("child");
 
   // when
@@ -30,13 +31,13 @@ TEST(TestAccount, shouldAllowOneParent) {
 
 TEST(TestAccount, shouldAllowMultipleChildren) {
   // given
-  auto parentAcc = make_shared<Account>(A_UUID);
+  AccountPtr parentAcc(new Account(A_UUID));
   parentAcc->setName("parent");
 
-  auto childAcc1 = make_shared<Account>(ANOTHER_UUID);
+  AccountPtr childAcc1(new Account(ANOTHER_UUID));
   childAcc1->setName("child1");
 
-  auto childAcc2 = make_shared<Account>(YET_ANOTHER_UUID);
+  AccountPtr childAcc2(new Account(YET_ANOTHER_UUID));
   childAcc2->setName("child2");
 
   // when
@@ -104,13 +105,13 @@ TEST(TestAccount, shouldTriggerMemberObserverEvents) {
 
 TEST(TestAccount, shouldTriggerParentChildrenObserverEvents) {
   // given
-  auto parentAcc = make_shared<Account>(A_UUID);
+  AccountPtr parentAcc(new Account(A_UUID));
   MockModelObserver parentObs(*parentAcc);
 
-  auto childAcc1 = make_shared<Account>(ANOTHER_UUID);
+  AccountPtr childAcc1(new Account(ANOTHER_UUID));
   MockModelObserver childObs1(*childAcc1);
 
-  auto childAcc2 = make_shared<Account>(YET_ANOTHER_UUID);
+  AccountPtr childAcc2(new Account(YET_ANOTHER_UUID));
   MockModelObserver childObs2(*childAcc2);
 
   {

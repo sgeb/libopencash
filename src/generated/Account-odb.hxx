@@ -240,7 +240,7 @@ namespace odb
       static const char select_statement[];
       static const char delete_statement[];
 
-      typedef ::std::vector< ::std::weak_ptr< ::opencash::model::Account > > container_type;
+      typedef ::opencash::model::Account::WeakAccounts container_type;
       typedef
       odb::access::container_traits<container_type>
       container_traits_type;

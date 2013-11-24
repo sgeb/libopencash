@@ -477,11 +477,11 @@ namespace odb
     // _parent
     //
     {
-      ::std::shared_ptr< ::opencash::model::Account > const& v =
+      ::opencash::model::Account::AccountPtr const& v =
         o._parent;
 
       typedef object_traits< ::opencash::model::Account > obj_traits;
-      typedef odb::pointer_traits< ::std::shared_ptr< ::opencash::model::Account > > ptr_traits;
+      typedef odb::pointer_traits< ::opencash::model::Account::AccountPtr > ptr_traits;
 
       bool is_null (ptr_traits::null_ptr (v));
       if (!is_null)
@@ -534,7 +534,7 @@ namespace odb
     // _name
     //
     {
-      // From Account.h:58:18
+      // From Account.h:62:18
       ::std::string v;
 
       sqlite::value_traits<
@@ -545,14 +545,14 @@ namespace odb
         i._name_size,
         i._name_null);
 
-      // From Account.h:58:18
+      // From Account.h:62:18
       o.setName (v);
     }
 
     // _description
     //
     {
-      // From Account.h:61:18
+      // From Account.h:65:18
       ::std::string v;
 
       sqlite::value_traits<
@@ -563,14 +563,14 @@ namespace odb
         i._description_size,
         i._description_null);
 
-      // From Account.h:61:18
+      // From Account.h:65:18
       o.setDescription (v);
     }
 
     // _type
     //
     {
-      // From Account.h:64:18
+      // From Account.h:68:18
       ::opencash::model::Account::AccountType v;
 
       sqlite::value_traits<
@@ -580,18 +580,18 @@ namespace odb
         i._type_value,
         i._type_null);
 
-      // From Account.h:64:18
+      // From Account.h:68:18
       o.setType (v);
     }
 
     // _parent
     //
     {
-      // From Account.h:67:18
-      ::std::shared_ptr< ::opencash::model::Account > v;
+      // From Account.h:71:18
+      ::opencash::model::Account::AccountPtr v;
 
       typedef object_traits< ::opencash::model::Account > obj_traits;
-      typedef odb::pointer_traits< ::std::shared_ptr< ::opencash::model::Account > > ptr_traits;
+      typedef odb::pointer_traits< ::opencash::model::Account::AccountPtr > ptr_traits;
 
       if (i._parent_null)
         v = ptr_traits::pointer_type ();
@@ -615,7 +615,7 @@ namespace odb
             obj_traits::object_type > (id));
       }
 
-      // From Account.h:67:18
+      // From Account.h:71:18
       o.setParent (v);
     }
   }
@@ -1002,7 +1002,7 @@ namespace odb
     // _children
     //
     {
-      ::std::vector< ::std::weak_ptr< ::opencash::model::Account > >& v =
+      ::opencash::model::Account::WeakAccounts& v =
         obj._children;
 
       children_traits::load (

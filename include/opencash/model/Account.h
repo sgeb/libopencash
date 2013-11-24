@@ -19,6 +19,10 @@ namespace opencash { namespace model {
     friend class odb::access;
 
     public:
+      using AccountPtr = std::shared_ptr<Account>;
+      using Accounts = std::vector<AccountPtr>;
+      using WeakAccounts = std::vector<std::weak_ptr<Account>>;
+
       enum class AccountType {
         None,
         Root,
@@ -44,10 +48,10 @@ namespace opencash { namespace model {
       AccountType getType() const;
       void setType(AccountType type);
 
-      std::shared_ptr<Account> getParent() const;
-      void setParent(std::shared_ptr<Account> parent);
+      AccountPtr getParent() const;
+      void setParent(AccountPtr parent);
 
-      const std::vector<std::weak_ptr<Account>> & getChildren() const;
+      const WeakAccounts & getChildren() const;
 
     private:
       Account();
@@ -65,10 +69,10 @@ namespace opencash { namespace model {
       AccountType _type;
 
       #pragma db set(setParent)
-      std::shared_ptr<Account> _parent;
+      AccountPtr _parent;
 
       #pragma db value_not_null inverse(_parent)
-      std::vector<std::weak_ptr<Account>> _children;
+      WeakAccounts _children;
   };
 
 }}

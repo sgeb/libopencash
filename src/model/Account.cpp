@@ -1,11 +1,10 @@
 #include "opencash/model/Account.h"
 
-#include <sstream>
-
-using std::shared_ptr;
-using AccountType = opencash::model::Account::AccountType;
-
 namespace opencash { namespace model {
+
+  using AccountType = opencash::model::Account::AccountType;
+  using AccountPtr = opencash::model::Account::AccountPtr;
+  using WeakAccounts = opencash::model::Account::WeakAccounts;
 
   Account::Account(const std::string & uuid) : _uuid(uuid) {}
   Account::Account() {}
@@ -56,12 +55,12 @@ namespace opencash { namespace model {
     didChange("type");
   }
 
-  shared_ptr<Account> Account::getParent() const
+  AccountPtr Account::getParent() const
   {
     return _parent;
   }
 
-  void Account::setParent(shared_ptr<Account> parent)
+  void Account::setParent(AccountPtr parent)
   {
     if (&*parent == &*_parent) { return; }
 
@@ -100,7 +99,7 @@ namespace opencash { namespace model {
     didChange("parent");
   }
 
-  const std::vector<std::weak_ptr<Account>> & Account::getChildren() const
+  const WeakAccounts & Account::getChildren() const
   {
     return _children;
   }

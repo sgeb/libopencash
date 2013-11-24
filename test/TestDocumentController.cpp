@@ -6,27 +6,29 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-using namespace opencash::controller;
-using namespace opencash::model;
-using namespace std;
-using namespace ::testing;
+using DocumentController = opencash::controller::DocumentController;
+using Account = opencash::model::Account;
 using AccountType = opencash::model::Account::AccountType;
+using AccountPtr = opencash::model::Account::AccountPtr;
+using Accounts = opencash::model::Account::Accounts;
+using AccountsMeta = opencash::model::AccountsMeta;
 
-const string DBFILENAME = ":memory:";
-/* const string DBFILENAME = "Test.db"; */
+using InSequence = ::testing::InSequence;
+
+const std::string DBFILENAME = ":memory:";
+/* const std::string DBFILENAME = "Test.db"; */
 
 class TestDocumentController : public ::testing::Test {
   protected:
-    unique_ptr<DocumentController> _doc;
+    std::unique_ptr<DocumentController> _doc;
 
     TestDocumentController()
       : _doc(new DocumentController(DBFILENAME, true))
-    {
-    }
+    {}
 
-    shared_ptr<Account> createAnAssetAccount()
+    AccountPtr createAnAssetAccount()
     {
-      auto ret = _doc->newAccount();
+      AccountPtr ret = _doc->newAccount();
       ret->setName("test account");
       ret->setDescription("This is my first asset account");
       ret->setType(AccountType::Asset);
@@ -35,18 +37,13 @@ class TestDocumentController : public ::testing::Test {
 };
 
 TEST_F(TestDocumentController, shouldInitializeWithRootAccount) {
-  // given
-
-  // when
-
-  // then
   ASSERT_EQ(1, _doc->getAccountsMeta()->getCount());
   ASSERT_EQ(AccountType::Root, _doc->retrieveAccounts()->at(0)->getType());
 }
 
 TEST_F(TestDocumentController, shouldPersistOneAccount) {
   // given
-  auto acc = createAnAssetAccount();
+  AccountPtr acc = createAnAssetAccount();
 
   // when
   _doc->persistAccount(*acc);
@@ -57,8 +54,8 @@ TEST_F(TestDocumentController, shouldPersistOneAccount) {
 
 TEST_F(TestDocumentController, shouldPersistTwoAccounts) {
   // given
-  auto acc = createAnAssetAccount();
-  auto acc2 = createAnAssetAccount();
+  AccountPtr acc = createAnAssetAccount();
+  AccountPtr acc2 = createAnAssetAccount();
 
   // when
   _doc->persistAccount(*acc);
@@ -70,13 +67,13 @@ TEST_F(TestDocumentController, shouldPersistTwoAccounts) {
 
 TEST_F(TestDocumentController, shouldRetrieveAccounts) {
   // given
-  auto acc = createAnAssetAccount();
-  auto acc2 = createAnAssetAccount();
+  AccountPtr acc = createAnAssetAccount();
+  AccountPtr acc2 = createAnAssetAccount();
   _doc->persistAccount(*acc);
   _doc->persistAccount(*acc2);
 
   // when
-  unique_ptr<vector<shared_ptr<Account>>> accounts = _doc->retrieveAccounts();
+  std::unique_ptr<Accounts> accounts = _doc->retrieveAccounts();
 
   // then
   ASSERT_EQ(3, accounts->size());
@@ -93,7 +90,7 @@ TEST_F(TestDocumentController, shouldUpdateAccountsMetaAndFireEvents) {
     EXPECT_CALL(obs, willChange("count"));
     EXPECT_CALL(obs, didChange("count"));
   }
-  auto acc = createAnAssetAccount();
+  AccountPtr acc = createAnAssetAccount();
 
   // when
   _doc->persistAccount(*acc);

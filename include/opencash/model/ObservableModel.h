@@ -26,17 +26,22 @@ namespace opencash { namespace model {
           ChangeType change;
       };
 
+      using Event = Poco::BasicEvent<const EventArgs>;
+
     public:
-      Poco::BasicEvent<const EventArgs> willChangeEvent;
-      Poco::BasicEvent<const EventArgs> didChangeEvent;
-      Poco::BasicEvent<const EventArgs> willChangeAtIndexEvent;
-      Poco::BasicEvent<const EventArgs> didChangeAtIndexEvent;
+      Event willChangeEvent;
+      Event didChangeEvent;
+      Event willChangeAtIndexEvent;
+      Event didChangeAtIndexEvent;
 
     protected:
       void willChange(std::string key);
       void didChange(std::string key);
-      void willChangeAtIndex(std::string key, std::size_t index, ChangeType change);
-      void didChangeAtIndex(std::string key, std::size_t index, ChangeType change);
+
+      void willChangeAtIndex(std::string key, std::size_t index,
+          ChangeType change);
+      void didChangeAtIndex(std::string key, std::size_t index,
+          ChangeType change);
   };
 
 }}

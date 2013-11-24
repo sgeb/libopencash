@@ -13,21 +13,18 @@
 
 #include <memory>
 
-using namespace odb::core;
-
-using opencash::model::Account;
-using AccountType = opencash::model::Account::AccountType;
-using opencash::model::AccountsMeta;
-
-using std::string;
-using std::unique_ptr;
-using std::shared_ptr;
-using std::vector;
-
 namespace opencash { namespace controller {
 
+  using namespace odb::core;
+
+  using Account = opencash::model::Account;
+  using AccountType = opencash::model::Account::AccountType;
+  using AccountPtr = opencash::model::Account::AccountPtr;
+  using Accounts = opencash::model::Account::Accounts;
+  using AccountsMeta = opencash::model::AccountsMeta;
+
   DocumentController::DocumentController(
-      const string & dbFilename,
+      const std::string & dbFilename,
       bool shouldInitialize
       ) :
     _dbFilename(dbFilename),
@@ -45,30 +42,28 @@ namespace opencash { namespace controller {
     return _accountsMeta.get();
   }
 
-  unique_ptr<vector<shared_ptr<Account>>>
-  DocumentController::retrieveAccounts() const
+  std::unique_ptr<Accounts> DocumentController::retrieveAccounts() const
   {
-    unique_ptr<vector<shared_ptr<Account>>>
-      ret(new vector<shared_ptr<Account>>);
+    std::unique_ptr<Accounts> ret(new Accounts);
 
     session s;
     transaction t(_db->begin());
     auto r(_db->query<Account>());
     for (auto i(r.begin()); i != r.end(); ++i)
     {
-      ret->push_back(shared_ptr<Account>(i.load()));
+      ret->push_back(AccountPtr(i.load()));
     }
     t.commit();
 
     return ret;
   }
 
-  shared_ptr<Account> DocumentController::newAccount() const
+  AccountPtr DocumentController::newAccount() const
   {
     Poco::UUIDGenerator & generator = Poco::UUIDGenerator::defaultGenerator();
     Poco::UUID uuid(generator.createOne());
     // TODO: make sure this UUID doesn't exist in DB yet
-    return std::make_shared<Account>(uuid.toString());
+    return AccountPtr(new Account(uuid.toString()));
   }
 
   void DocumentController::persistAccount(const Account & account)
