@@ -8,21 +8,8 @@
 #include <string>
 #include <memory>
 
-using std::shared_ptr;
-using std::weak_ptr;
-using std::vector;
-
 namespace opencash { namespace model {
 
-  enum class AccountType {
-    None,
-    Root,
-    Asset,
-    Liability,
-    Expense,
-    Income,
-    Equity,
-  };
 
   #pragma db object table("accounts") pointer(std::shared_ptr)
   class Account :
@@ -30,6 +17,17 @@ namespace opencash { namespace model {
     public ObservableModel
   {
     friend class odb::access;
+
+    public:
+      enum class AccountType {
+        None,
+        Root,
+        Asset,
+        Liability,
+        Expense,
+        Income,
+        Equity,
+      };
 
     public:
       Account(const std::string & uuid);
@@ -46,10 +44,10 @@ namespace opencash { namespace model {
       AccountType getType() const;
       void setType(AccountType type);
 
-      shared_ptr<Account> getParent() const;
-      void setParent(shared_ptr<Account> parent);
+      std::shared_ptr<Account> getParent() const;
+      void setParent(std::shared_ptr<Account> parent);
 
-      const vector<weak_ptr<Account>> & getChildren() const;
+      const std::vector<std::weak_ptr<Account>> & getChildren() const;
 
     private:
       Account();
@@ -67,10 +65,10 @@ namespace opencash { namespace model {
       AccountType _type;
 
       #pragma db set(setParent)
-      shared_ptr<Account> _parent;
+      std::shared_ptr<Account> _parent;
 
-      #pragma db value_not_null inverse(_parent) //set(setChildren)
-      vector<weak_ptr<Account>> _children;
+      #pragma db value_not_null inverse(_parent)
+      std::vector<std::weak_ptr<Account>> _children;
   };
 
 }}

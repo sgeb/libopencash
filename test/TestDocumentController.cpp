@@ -10,6 +10,7 @@ using namespace opencash::controller;
 using namespace opencash::model;
 using namespace std;
 using namespace ::testing;
+using AccountType = opencash::model::Account::AccountType;
 
 const string DBFILENAME = ":memory:";
 /* const string DBFILENAME = "Test.db"; */

@@ -4,10 +4,6 @@
 #include <Poco/BasicEvent.h>
 #include <string>
 
-using Poco::BasicEvent;
-using std::string;
-using std::size_t;
-
 namespace opencash { namespace model {
 
   class ObservableModel {
@@ -21,26 +17,26 @@ namespace opencash { namespace model {
 
       class EventArgs {
         public:
-          EventArgs(string k, size_t i = 0,
+          EventArgs(std::string k, std::size_t i = 0,
               ChangeType c = ChangeType::Setting)
             : key(k), index(i), change(c) {}
 
-          string key;
-          size_t index;
+          std::string key;
+          std::size_t index;
           ChangeType change;
       };
 
     public:
-      BasicEvent<const EventArgs> willChangeEvent;
-      BasicEvent<const EventArgs> didChangeEvent;
-      BasicEvent<const EventArgs> willChangeAtIndexEvent;
-      BasicEvent<const EventArgs> didChangeAtIndexEvent;
+      Poco::BasicEvent<const EventArgs> willChangeEvent;
+      Poco::BasicEvent<const EventArgs> didChangeEvent;
+      Poco::BasicEvent<const EventArgs> willChangeAtIndexEvent;
+      Poco::BasicEvent<const EventArgs> didChangeAtIndexEvent;
 
     protected:
-      void willChange(string key);
-      void didChange(string key);
-      void willChangeAtIndex(string key, size_t index, ChangeType change);
-      void didChangeAtIndex(string key, size_t index, ChangeType change);
+      void willChange(std::string key);
+      void didChange(std::string key);
+      void willChangeAtIndex(std::string key, std::size_t index, ChangeType change);
+      void didChangeAtIndex(std::string key, std::size_t index, ChangeType change);
   };
 
 }}

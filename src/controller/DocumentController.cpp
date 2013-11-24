@@ -16,7 +16,7 @@
 using namespace odb::core;
 
 using opencash::model::Account;
-using opencash::model::AccountType;
+using AccountType = opencash::model::Account::AccountType;
 using opencash::model::AccountsMeta;
 
 using std::string;

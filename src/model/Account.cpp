@@ -3,6 +3,7 @@
 #include <sstream>
 
 using std::shared_ptr;
+using AccountType = opencash::model::Account::AccountType;
 
 namespace opencash { namespace model {
 
@@ -99,7 +100,7 @@ namespace opencash { namespace model {
     didChange("parent");
   }
 
-  const vector<weak_ptr<Account>> & Account::getChildren() const
+  const std::vector<std::weak_ptr<Account>> & Account::getChildren() const
   {
     return _children;
   }

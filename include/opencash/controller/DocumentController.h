@@ -10,26 +10,21 @@ namespace opencash { namespace model {
   class AccountsMeta;
 }}
 
-using opencash::model::Account;
-using opencash::model::AccountsMeta;
-
-using std::string;
-using std::unique_ptr;
-using std::shared_ptr;
-using std::vector;
-
 namespace opencash { namespace controller {
 
   class DocumentController {
+    using Account = opencash::model::Account;
+    using AccountsMeta = opencash::model::AccountsMeta;
+
     public: // general methods
-      DocumentController(
-          const string & dbFilename,
+      DocumentController(const std::string & dbFilename,
           bool shouldInitialize = false);
 
     public: // related to Accounts
       AccountsMeta * getAccountsMeta() const;
-      unique_ptr<vector<shared_ptr<Account>>> retrieveAccounts() const;
-      shared_ptr<Account> newAccount() const;
+      std::unique_ptr<std::vector<std::shared_ptr<Account>>>
+        retrieveAccounts() const;
+      std::shared_ptr<Account> newAccount() const;
       void persistAccount(const Account & account);
 
     private: // private methods
@@ -37,9 +32,9 @@ namespace opencash { namespace controller {
       void updateAccountsMeta();
 
     private: // private members
-      const string _dbFilename;
-      unique_ptr<AccountsMeta> _accountsMeta;
-      unique_ptr<odb::database> _db;
+      const std::string _dbFilename;
+      std::unique_ptr<AccountsMeta> _accountsMeta;
+      std::unique_ptr<odb::database> _db;
   };
 
 }}

@@ -4,7 +4,8 @@
 #include <Poco/delegate.h>
 
 namespace opencash { namespace controller {
-  typedef ::Poco::Delegate<ModelObserver, const EventArgs, false> MyDelegate;
+  using EventArgs = opencash::model::ObservableModel::EventArgs;
+  using MyDelegate = Poco::Delegate<ModelObserver, const EventArgs, false>;
 
   ModelObserver::ModelObserver(model::ObservableModel & model) :
     _model(model)

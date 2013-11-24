@@ -461,12 +461,12 @@ namespace odb
     // _type
     //
     {
-      ::opencash::model::AccountType const& v =
+      ::opencash::model::Account::AccountType const& v =
         o._type;
 
       bool is_null (false);
       sqlite::value_traits<
-          ::opencash::model::AccountType,
+          ::opencash::model::Account::AccountType,
           sqlite::id_integer >::set_image (
         i._type_value,
         is_null,
@@ -534,7 +534,7 @@ namespace odb
     // _name
     //
     {
-      // From Account.h:60:18
+      // From Account.h:58:18
       ::std::string v;
 
       sqlite::value_traits<
@@ -545,14 +545,14 @@ namespace odb
         i._name_size,
         i._name_null);
 
-      // From Account.h:60:18
+      // From Account.h:58:18
       o.setName (v);
     }
 
     // _description
     //
     {
-      // From Account.h:63:18
+      // From Account.h:61:18
       ::std::string v;
 
       sqlite::value_traits<
@@ -563,31 +563,31 @@ namespace odb
         i._description_size,
         i._description_null);
 
-      // From Account.h:63:18
+      // From Account.h:61:18
       o.setDescription (v);
     }
 
     // _type
     //
     {
-      // From Account.h:66:18
-      ::opencash::model::AccountType v;
+      // From Account.h:64:18
+      ::opencash::model::Account::AccountType v;
 
       sqlite::value_traits<
-          ::opencash::model::AccountType,
+          ::opencash::model::Account::AccountType,
           sqlite::id_integer >::set_value (
         v,
         i._type_value,
         i._type_null);
 
-      // From Account.h:66:18
+      // From Account.h:64:18
       o.setType (v);
     }
 
     // _parent
     //
     {
-      // From Account.h:69:18
+      // From Account.h:67:18
       ::std::shared_ptr< ::opencash::model::Account > v;
 
       typedef object_traits< ::opencash::model::Account > obj_traits;
@@ -615,7 +615,7 @@ namespace odb
             obj_traits::object_type > (id));
       }
 
-      // From Account.h:69:18
+      // From Account.h:67:18
       o.setParent (v);
     }
   }

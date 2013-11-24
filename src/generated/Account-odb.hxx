@@ -132,7 +132,7 @@ namespace odb
     typedef
     sqlite::query_column<
       sqlite::value_traits<
-        ::opencash::model::AccountType,
+        ::opencash::model::Account::AccountType,
         sqlite::id_integer >::query_type,
       sqlite::id_integer >
     type_type_;
@@ -459,7 +459,7 @@ namespace odb
     typedef
     sqlite::query_column<
       sqlite::value_traits<
-        ::opencash::model::AccountType,
+        ::opencash::model::Account::AccountType,
         sqlite::id_integer >::query_type,
       sqlite::id_integer >
     type_type_;

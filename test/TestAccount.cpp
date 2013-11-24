@@ -7,6 +7,7 @@
 using namespace opencash::model;
 using namespace std;
 using namespace ::testing;
+using AccountType = opencash::model::Account::AccountType;
 
 const string A_UUID = "a_uuid";
 const string ANOTHER_UUID = "another_uuid";

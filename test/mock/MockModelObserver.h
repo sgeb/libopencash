@@ -12,9 +12,10 @@ namespace opencash { namespace model {
 
 using opencash::controller::ModelObserver;
 using opencash::model::ObservableModel;
-using ChangeType = opencash::model::ObservableModel::ChangeType;
 
 class MockModelObserver : public ModelObserver {
+  using ChangeType = opencash::model::ObservableModel::ChangeType;
+
   public:
     MockModelObserver(ObservableModel & model) : ModelObserver(model) {}
 
