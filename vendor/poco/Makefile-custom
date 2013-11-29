@@ -6,6 +6,12 @@ my_static_debug:
 my_static_release:
 	$(MAKE) -f Makefile -f ../Makefile-custom -C $(POCO_BASE)/Foundation my_lib_static_release
 
+my_shared_debug:
+	$(MAKE) -f Makefile -f ../Makefile-custom -C $(POCO_BASE)/Foundation my_lib_shared_debug
+
+my_shared_release:
+	$(MAKE) -f Makefile -f ../Makefile-custom -C $(POCO_BASE)/Foundation my_lib_shared_release
+
 # Override the debug libraries to _not_ append the 'd' suffix
 
 MY_LIBPATH_DEBUG           = $(LIBPATH)/debug
@@ -22,7 +28,12 @@ $(MY_LIBPATH_DEBUG) $(MY_LIBPATH_RELEASE):
 	$(MKDIR) $@
 
 my_lib_static_debug:   libdirs $(MY_LIBPATH_DEBUG) $(MY_LIB_DEBUG_STATIC)
+
 my_lib_static_release: libdirs $(MY_LIBPATH_RELEASE) $(MY_LIB_RELEASE_STATIC)
+
+my_lib_shared_debug:   libdirs $(MY_LIBPATH_DEBUG) $(MY_LIB_DEBUG_SHARED)
+
+my_lib_shared_release: libdirs $(MY_LIBPATH_RELEASE) $(MY_LIB_RELEASE_SHARED)
 
 $(MY_LIB_DEBUG_STATIC): $(foreach o,$(objects),$(OBJPATH_DEBUG_STATIC)/$(o).o)
 	@echo "** Building library (debug)" $@
@@ -31,6 +42,18 @@ $(MY_LIB_DEBUG_STATIC): $(foreach o,$(objects),$(OBJPATH_DEBUG_STATIC)/$(o).o)
 	$(postbuild)
 
 $(MY_LIB_RELEASE_STATIC): $(foreach o,$(objects),$(OBJPATH_RELEASE_STATIC)/$(o).o)
+	@echo "** Building library (release)" $@
+	$(LIB) $@ $^
+	$(RANLIB) $@
+	$(postbuild)
+
+$(MY_LIB_DEBUG_SHARED): $(foreach o,$(objects),$(OBJPATH_DEBUG_SHARED)/$(o).o)
+	@echo "** Building library (debug)" $@
+	$(LIB) $@ $^
+	$(RANLIB) $@
+	$(postbuild)
+
+$(MY_LIB_RELEASE_SHARED): $(foreach o,$(objects),$(OBJPATH_RELEASE_SHARED)/$(o).o)
 	@echo "** Building library (release)" $@
 	$(LIB) $@ $^
 	$(RANLIB) $@
