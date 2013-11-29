@@ -2,25 +2,45 @@ cmake_minimum_required(VERSION 2.8.8)
 project(poco_builder C CXX)
 include(ExternalProject)
 
+if(OC_TARGET_IOS)
+  set(CONFIGURE_ARGS --config=iPhone-clang)
+endif()
+
+if(OC_STATIC)
+  set(BUILD_TARGET my_static)
+else()
+  set(BUILD_TARGET my_shared)
+endif()
+
+if(OC_DEBUG)
+  set(BUILD_TARGET ${BUILD_TARGET}_debug)
+else()
+  set(BUILD_TARGET ${BUILD_TARGET}_release)
+endif()
+
 ExternalProject_Add(poco
   URL https://github.com/pocoproject/poco/archive/poco-1.5.2-release.tar.gz
   URL_MD5 4ed751311fe4eb437a485139fcfdf558
   SOURCE_DIR ${PROJECT_BINARY_DIR}/src/poco
 
-  CMAKE_ARGS
-      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-      -DPOCO_STATIC=${OC_STATIC}
-      -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-      -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
-      -DCMAKE_CXX_FLAGS_DEBUG=${CMAKE_CXX_FLAGS_DEBUG}
-      -DCMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}
   PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
   INSTALL_DIR ${OC_INSTALL_DIR}
+  UPDATE_COMMAND ""
+  BUILD_IN_SOURCE 1
 
-  # Overwrite CMakeLists.txt with custom one
-  # so that we only build required libraries
+  # Unfortunately the poco Makefile isn't as flexible as we'd like, so we copy
+  # our own Makefile extensions to the source dir
   PATCH_COMMAND ${CMAKE_COMMAND} -E copy
-      "${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists-poco.txt" <SOURCE_DIR>/CMakeLists.txt
+    "${CMAKE_CURRENT_SOURCE_DIR}/Makefile-custom" <SOURCE_DIR>/Makefile-custom
+
+  CONFIGURE_COMMAND ./configure ${CONFIGURE_ARGS}
+    --no-tests --no-samples --prefix=${OC_INSTALL_DIR} --cflags="${CXX_FLAGS}"
+
+  # Source our custom Makefile before building
+  BUILD_COMMAND make -f Makefile -f Makefile-custom -j4 ${BUILD_TARGET}
+
+  # Source our custom Makefile before installing
+  INSTALL_COMMAND make -f Makefile -f Makefile-custom my_install
 
   # Wrap download, configure and build steps in a script to log output
   LOG_DOWNLOAD ON
