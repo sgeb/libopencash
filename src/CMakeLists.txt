@@ -33,7 +33,11 @@ foreach(_model ${ODB_MODELS})
   list(APPEND ODB_DEPENDS "../include/opencash/model/${_model}.h")
 endforeach()
 
-find_program(ODB_EXECUTABLE odb)
+if(OC_TARGET_IOS OR OC_TARGET_IOSSIMULATOR)
+  find_host_program(ODB_EXECUTABLE odb)
+else()
+  find_program(ODB_EXECUTABLE odb)
+endif()
 set(ODB_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/generated)
 add_custom_command(
   OUTPUT ${ODB_OUTPUT}

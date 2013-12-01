@@ -3,9 +3,15 @@ project(libodb-sqlite_builder C CXX)
 include(ExternalProject)
 
 if(OC_STATIC)
-  set(CONFIGURE_ARGS_STATIC_SHARED --enable-static --disable-shared)
+  set(CONFIGURE_ARGS --enable-static --disable-shared)
 else()
-  set(CONFIGURE_ARGS_STATIC_SHARED --enable-shared --disable-static)
+  set(CONFIGURE_ARGS --enable-shared --disable-static)
+endif()
+
+if(OC_TARGET_IOS)
+  set(CONFIGURE_ARGS ${CONFIGURE_ARGS} --host=armv7 --build=x86_64 --disable-threads)
+elseif(OC_TARGET_IOSSIMULATOR)
+  set(CONFIGURE_ARGS ${CONFIGURE_ARGS} --host=i386 --build=x86_64 --disable-threads)
 endif()
 
 ExternalProject_Add(libodb-sqlite
@@ -15,15 +21,16 @@ ExternalProject_Add(libodb-sqlite
 
   PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
   INSTALL_DIR ${OC_INSTALL_DIR}
+  UPDATE_COMMAND ""
+  PATCH_COMMAND ""
+  BUILD_IN_SOURCE 1
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    --prefix=<INSTALL_DIR>
-    ${CONFIGURE_ARGS_STATIC_SHARED}
-    # ugly CXX hack to get CXX to use -stdlib=libc++ during linking
-    CXX=${CMAKE_CXX_COMPILER}\ ${CMAKE_CXX_FLAGS}
-    CXXFLAGS=${CMAKE_CXX_FLAGS}
-    CPPFLAGS=-I${OC_INSTALL_INCLUDE_DIR}
-    LDFLAGS=-L${OC_INSTALL_LIB_DIR}
+    --prefix=<INSTALL_DIR> CXXFLAGS=${CMAKE_CXX_FLAGS}
+    LDFLAGS=-L${OC_INSTALL_LIB_DIR} CPPFLAGS=-I${OC_INSTALL_INCLUDE_DIR}
+    ${CONFIGURE_ARGS}
+
+  BUILD_COMMAND make -j4 all
 
   # Wrap download, configure and build steps in a script to log output
   LOG_DOWNLOAD ON
