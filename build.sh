@@ -2,6 +2,19 @@
 
 #set -x
 
+XCODE_IPHONE_SIMULATOR_DIR=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform
+IPHONE_SIMULATOR_AR=${XCODE_IPHONE_SIMULATOR_DIR}/Developer/usr/bin/ar
+
+if [ -d "$XCODE_IPHONE_SIMULATOR_DIR" -a ! -e "$IPHONE_SIMULATOR_AR" ]
+then
+    echo "Error: \`ar\` not found for iPhoneSimulator at ${IPHONE_SIMULATOR_AR}"
+    echo
+    echo "This is probably a bug with Xcode 5. You can fix it with the following command:"
+    echo
+    echo "sudo ln -s ../../Toolchains/XcodeDefault.xctoolchain/usr/bin/ar $IPHONE_SIMULATOR_AR"
+    exit 1
+fi
+
 platform="all"
 configuration="Debug"
 make_targets="all"
