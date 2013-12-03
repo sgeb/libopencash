@@ -2,18 +2,12 @@
 
 #set -x
 
-XCODE_IPHONE_SIMULATOR_DIR=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform
-IPHONE_SIMULATOR_AR=${XCODE_IPHONE_SIMULATOR_DIR}/Developer/usr/bin/ar
-
-if [ -d "$XCODE_IPHONE_SIMULATOR_DIR" -a ! -e "$IPHONE_SIMULATOR_AR" ]
-then
-    echo "Error: \`ar\` not found for iPhoneSimulator at ${IPHONE_SIMULATOR_AR}"
-    echo
-    echo "This is probably a bug with Xcode 5. You can fix it with the following command:"
-    echo
-    echo "sudo ln -s ../../Toolchains/XcodeDefault.xctoolchain/usr/bin/ar $IPHONE_SIMULATOR_AR"
-    exit 1
-fi
+is_ios_simulator_ar_avail()
+{
+  XCODE_IPHONE_SIMULATOR_DIR=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform
+  IPHONE_SIMULATOR_AR=${XCODE_IPHONE_SIMULATOR_DIR}/Developer/usr/bin/ar
+  return $(test -d "$XCODE_IPHONE_SIMULATOR_DIR" -a -e "$IPHONE_SIMULATOR_AR")
+}
 
 platform="all"
 configuration="Debug"
@@ -66,6 +60,21 @@ for p in $platforms; do
 
   mkdir -p "$p_build_dir"
   cd "$p_build_dir"
+
+  if [ $p = "ios-simulator" ] && ! is_ios_simulator_ar_avail
+  then
+    echo "======"
+    echo "Warning:"
+    echo "\`ar\` not found for iPhoneSimulator at"
+    echo "${IPHONE_SIMULATOR_AR}"
+    echo
+    echo "This is probably a bug with Xcode 5 and the build might"
+    echo "fail on \`ar\` not being found. You can fix it with the"
+    echo "following command:"
+    echo
+    echo "sudo ln -s ../../Toolchains/XcodeDefault.xctoolchain/usr/bin/ar $IPHONE_SIMULATOR_AR"
+    echo "======"
+  fi
 
   if [ $p = "ios-universal" ]
   then
