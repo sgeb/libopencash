@@ -8,9 +8,9 @@ else()
   set(CONFIGURE_ARGS --enable-shared --disable-static)
 endif()
 
-if(OC_TARGET_IOS)
+if(OC_PLATFORM_IOS_DEVICE)
   set(CONFIGURE_ARGS ${CONFIGURE_ARGS} --host=armv7 --build=x86_64 --disable-threads)
-elseif(OC_TARGET_IOSSIMULATOR)
+elseif(OC_PLATFORM_IOS_SIMULATOR)
   set(CONFIGURE_ARGS ${CONFIGURE_ARGS} --host=i386 --build=x86_64 --disable-threads)
 endif()
 

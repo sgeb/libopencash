@@ -14,9 +14,11 @@ else()
   set(BUILD_TARGET ${BUILD_TARGET}_release)
 endif()
 
-if(OC_TARGET_IOS)
+if(OC_PLATFORM_IOS_DEVICE)
+  message(STATUS "IOS_DEVICE")
   set(CONFIGURE_ARGS --config=iPhone-clang)
-elseif(OC_TARGET_IOSSIMULATOR)
+elseif(OC_PLATFORM_IOS_SIMULATOR)
+  message(STATUS "IOS_SIMULATOR")
   set(CONFIGURE_ARGS --config=iPhoneSimulator-clang)
 endif()
 

@@ -33,7 +33,7 @@ foreach(_model ${ODB_MODELS})
   list(APPEND ODB_DEPENDS "../include/opencash/model/${_model}.h")
 endforeach()
 
-if(OC_TARGET_IOS OR OC_TARGET_IOSSIMULATOR)
+if(OC_PLATFORM_IOS_DEVICE OR OC_PLATFORM_IOS_SIMULATOR)
   find_host_program(ODB_EXECUTABLE odb)
 else()
   find_program(ODB_EXECUTABLE odb)
